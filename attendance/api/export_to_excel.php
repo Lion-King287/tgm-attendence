@@ -51,7 +51,7 @@ foreach ($students as $student) {
 
 // Erstelle pro Klasse eine ExcelWriter-Instanz und schreibe die Daten
 foreach ($classes as $className => $classStudents) {
-    $filePath = "{$className}_SS_Test.xlsm";
+    $filePath = "{$className}.xlsm";
 
     $excelWriter = new ExcelWriter($accessToken, $filePath);
 

@@ -28,7 +28,7 @@ class ExcelWriter {
             $client = $this->initializeHttpClient();
 
             // API URL für die Suche nach der Datei
-            $url = "https://graph.microsoft.com/v1.0/me/drive/root/search(q='" . basename($this->filePath) . "')";
+            $url = "https://graph.microsoft.com/v1.0/me/drive/root:/Desktop/Schule/Klassenbücher/Tests:/search(q='" . basename($this->filePath) . "')";
 
             // Header für den Request (Authorization)
             $headers = [

@@ -13,7 +13,6 @@ $dbname = 'attendance';
 $username = 'admin';
 $password = 'admin';
 
-
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -299,7 +298,15 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
 
     function deleteStudent(button) {
         const row = button.closest('tr');
+        const tableBody = row.parentElement;
         row.remove();
+
+        // Check if the table body is empty
+        if (tableBody.rows.length === 0) {
+            const classTable = tableBody.closest('div[id^="class-"]');
+            classTable.remove();
+        }
+
         updateAttendanceCount();
     }
 
