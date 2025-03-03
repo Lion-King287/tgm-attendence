@@ -44,9 +44,21 @@ $stmt = $pdo->prepare('SELECT * FROM students s JOIN student_cards sc ON s.usern
 $stmt->execute([$cardId]);
 $personData = $stmt->fetch();
 
+// WebSocket-Nachricht senden
+$wsData = '';
+
 if (!$personData) {
     header('HTTP/1.1 404 Not Found');
     echo json_encode(['error' => 'No person found with the given card ID']);
+
+    $wsData = json_encode([
+        'card_id' => $cardId,
+        'firstname' => null,
+        'lastname' => null,
+        'class' => null,
+        'catalog_number' => null,
+        'login_timestamp' => null
+    ]);
 } else {
     // Antwort zurückgeben
     $response = [
@@ -58,17 +70,16 @@ if (!$personData) {
 
     header('Content-Type: application/json');
     echo json_encode($response);
-}
 
-// WebSocket-Nachricht senden
-$wsData = json_encode([
-    'card_id' => $cardId,
-    'firstname' => $personData['firstname'],
-    'lastname' => $personData['lastname'],
-    'class' => $personData['class'],
-    'catalog_number' => $personData['catalog_number'],
-    'login_timestamp' => round(microtime(true) * 1000)
-]);
+    $wsData = json_encode([
+        'card_id' => $cardId,
+        'firstname' => $personData['firstname'],
+        'lastname' => $personData['lastname'],
+        'class' => $personData['class'],
+        'catalog_number' => $personData['catalog_number'],
+        'login_timestamp' => round(microtime(true) * 1000)
+    ]);
+}
 
 try {
     $client = new Client("ws://localhost:8080");

@@ -123,20 +123,27 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
             <div class="col-12 text-center mb-3">
                 <h1 class="mt-3">Anwesenheitskontrolle</h1>
                 <div class="d-flex justify-content-center">
-                    <h3>
+                    <h4>
                         <span class="badge bg-success me-2"><i class="bi bi-door-closed"></i> <?php echo htmlspecialchars($roomName); ?></span>
                         <span class="badge bg-primary me-2"><i class="bi bi-journal-text"></i> <?php echo htmlspecialchars($subject); ?></span>
-                        <span class="badge bg-secondary me-2"><i class="bi bi-calendar-event"></i> <?php echo htmlspecialchars($date); ?></span>
+                        <span class="badge bg-secondary me-2"><i class="bi bi-calendar-event"></i> <?php $dateObj = new DateTime($date); echo htmlspecialchars($dateObj->format('d.m.Y')); ?></span>
                         <span class="badge bg-secondary me-2"><i class="bi bi-clock"></i> <?php echo htmlspecialchars(implode(', ', $units)); ?></span>
                         <span class="badge bg-secondary me-2"><i class="bi bi-person"></i> <?php echo htmlspecialchars($teacherShortName); ?></span>
-                    </h3>
+                    </h4>
                 </div>
-                <div class="text-center mt-3">
-                    <button class="btn btn-success" id="exportButton">Ins Klassenbuch übertragen</button>
+                <div class="text-center mt-1">
+                    <h4>
+                        <span class="badge bg-secondary me-2"><i class="bi bi-person-check"></i> Erfasste Personen: <span id="attendanceCount">0</span></span>
+                        <button class="btn btn-success badge" id="exportButton" >Ins Klassenbuch übertragen</button>
+                    </h4>
                 </div>
             </div>
             <div class="row justify-content-center">
                 <div class="col-11 col-md-10 col-lg-8" id="attendanceTables">
+                    <div class="alert alert-light" role="alert" id="noAttendanceAlert">
+                        <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                        Aktuell wurden noch keine Personen erfasst!
+                    </div>
                     <!-- Tabellen werden hier dynamisch eingefügt -->
                 </div>
             </div>
@@ -195,6 +202,9 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
 
         socket.onmessage = function(event) {
             var data = JSON.parse(event.data);
+            if (!data.room === '<?php echo $roomName; ?>') {
+                return;
+            }
             console.log('New attendance:', data);
 
             if (!data.firstname || !data.lastname || !data.class) {
@@ -233,9 +243,10 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
                 <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Vorname</th>
                         <th scope="col">Nachname</th>
+                        <th scope="col">Vorname</th>
                         <th scope="col">Uhrzeit</th>
+                        <th scope="col">Aktion</th>
                     </tr>
                 </thead>
                 <tbody id="class-${data.class}-body">
@@ -264,9 +275,10 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
 
         newRow.innerHTML = `
     <td>${data.catalog_number}</td>
-    <td>${data.firstname}</td>
     <td>${data.lastname}</td>
+    <td>${data.firstname}</td>
     <td>${new Date(data.login_timestamp).toLocaleTimeString()}</td>
+    <td><button class="btn btn-danger btn-sm" onclick="deleteStudent(this)"><i class="bi bi-trash"></i></button></td>
     `;
 
         // Insert the new row in the correct position to keep the table sorted by catalog_number
@@ -281,7 +293,37 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
         if (!rowInserted) {
             tableBody.appendChild(newRow);
         }
+
+        updateAttendanceCount();
     }
+
+    function deleteStudent(button) {
+        const row = button.closest('tr');
+        row.remove();
+        updateAttendanceCount();
+    }
+
+    function updateAttendanceCount() {
+        const attendanceTables = document.getElementById('attendanceTables');
+        const rows = attendanceTables.querySelectorAll('tbody tr');
+        const attendanceCount = rows.length;
+        document.getElementById('attendanceCount').innerText = attendanceCount;
+
+        const exportButton = document.getElementById('exportButton');
+        const noAttendanceAlert = document.getElementById('noAttendanceAlert');
+
+        if (attendanceCount === 0) {
+            exportButton.disabled = true;
+            noAttendanceAlert.style.display = 'block';
+        } else {
+            exportButton.disabled = false;
+            noAttendanceAlert.style.display = 'none';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        updateAttendanceCount();
+    });
 
     document.getElementById('exportButton').addEventListener('click', async function () {
         const attendanceTables = document.getElementById('attendanceTables');
@@ -352,12 +394,15 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
         fetch('../api/get_classes.php')
             .then(response => response.json())
             .then(classes => {
+                // Sort classes alphabetically
+                classes.sort((a, b) => a.class.localeCompare(b.class));
+
                 var classSelect = document.getElementById('classSelect');
                 classSelect.innerHTML = '<option value="" selected disabled>Select a class</option>';
                 classes.forEach(cls => {
                     var option = document.createElement('option');
-                    option.value = cls.name;
-                    option.textContent = cls.name;
+                    option.value = cls.class; // Ensure this matches the key in the returned JSON
+                    option.textContent = cls.class; // Ensure this matches the key in the returned JSON
                     classSelect.appendChild(option);
                 });
             })
@@ -369,12 +414,20 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
         fetch(`../api/get_students.php?class=${className}`)
             .then(response => response.json())
             .then(students => {
+                // Sort students by last name, then by first name
+                students.sort((a, b) => {
+                    if (a.lastname === b.lastname) {
+                        return a.firstname.localeCompare(b.firstname);
+                    }
+                    return a.lastname.localeCompare(b.lastname);
+                });
+
                 var studentSelect = document.getElementById('studentSelect');
                 studentSelect.innerHTML = '<option value="" selected disabled>Select a student</option>';
                 students.forEach(student => {
                     var option = document.createElement('option');
                     option.value = student.username;
-                    option.textContent = `${student.firstname} ${student.lastname}`;
+                    option.textContent = `${student.lastname} ${student.firstname}`;
                     studentSelect.appendChild(option);
                 });
             })
