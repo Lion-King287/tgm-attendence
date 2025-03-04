@@ -196,6 +196,24 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
 </div>
 
 
+<!-- Export Modal -->
+<div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exportModalLabel">Exportieren</h5>
+            </div>
+            <div class="modal-body text-center" id="exportModalBody">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p>Daten werden ins Klassenbuch übertragen...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var socket = new WebSocket('ws://localhost:8080');
@@ -357,7 +375,6 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
                     firstname: firstName,
                     lastname: lastName
                 });
-                console.log('Added student:', students[students.length - 1]);
             });
         });
 
@@ -370,6 +387,9 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
             students: students
         };
 
+        const exportModal = new bootstrap.Modal(document.getElementById('exportModal'));
+        exportModal.show();
+
         try {
             const response = await fetch('../api/export_to_excel.php', {
                 method: 'POST',
@@ -379,11 +399,23 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
                 body: JSON.stringify(dataToSend)
             });
 
-            if (!response.ok) throw new Error('Fehler beim Exportieren der Daten!');
-            alert('Daten erfolgreich exportiert!');
+            const result = await response.json(); // Parse the response as JSON
+
+            if (!response.ok) throw new Error(result.error || 'Fehler beim Exportieren der Daten!');
+
+            document.getElementById('exportModalBody').innerHTML = `
+            <div class="alert alert-success fade show" role="alert">
+                Daten erfolgreich exportiert!
+            </div>
+            <button type="button" class="btn btn-secondary mt-3" data-bs-dismiss="modal">Schließen</button>
+        `;
         } catch (error) {
-            console.error('Fehler:', error);
-            alert('Fehler beim Exportieren der Daten!');
+            document.getElementById('exportModalBody').innerHTML = `
+            <div class="alert alert-danger fade show" role="alert">
+                Fehler beim Exportieren der Daten: ${error.message}
+            </div>
+            <button type="button" class="btn btn-secondary mt-3" data-bs-dismiss="modal">Schließen</button>
+        `;
         }
     });
 

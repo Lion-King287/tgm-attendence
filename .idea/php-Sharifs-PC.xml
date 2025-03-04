@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="MessDetectorOptionsConfiguration">
+    <option name="transferred" value="true" />
+  </component>
+  <component name="PHPCSFixerOptionsConfiguration">
+    <option name="transferred" value="true" />
+  </component>
+  <component name="PHPCodeSnifferOptionsConfiguration">
+    <option name="highlightLevel" value="WARNING" />
+    <option name="transferred" value="true" />
+  </component>
+  <component name="PhpIncludePathManager">
+    <include_path>
+      <path value="$PROJECT_DIR$/attendance/vendor/react/dns" />
+      <path value="$PROJECT_DIR$/attendance/vendor/react/event-loop" />
+      <path value="$PROJECT_DIR$/attendance/vendor/react/promise" />
+      <path value="$PROJECT_DIR$/attendance/vendor/react/socket" />
+      <path value="$PROJECT_DIR$/attendance/vendor/react/stream" />
+      <path value="$PROJECT_DIR$/attendance/vendor/cboden/ratchet" />
+      <path value="$PROJECT_DIR$/attendance/vendor/ratchet/rfc6455" />
+      <path value="$PROJECT_DIR$/attendance/vendor/symfony/deprecation-contracts" />
+      <path value="$PROJECT_DIR$/attendance/vendor/symfony/http-foundation" />
+      <path value="$PROJECT_DIR$/attendance/vendor/symfony/polyfill-mbstring" />
+      <path value="$PROJECT_DIR$/attendance/vendor/symfony/polyfill-php83" />
+      <path value="$PROJECT_DIR$/attendance/vendor/symfony/routing" />
+      <path value="$PROJECT_DIR$/attendance/vendor/composer" />
+      <path value="$PROJECT_DIR$/attendance/vendor/evenement/evenement" />
+      <path value="$PROJECT_DIR$/attendance/vendor/ralouphie/getallheaders" />
+      <path value="$PROJECT_DIR$/attendance/vendor/guzzlehttp/psr7" />
+      <path value="$PROJECT_DIR$/attendance/vendor/psr/http-factory" />
+      <path value="$PROJECT_DIR$/attendance/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/attendance/vendor/react/cache" />
+      <path value="$PROJECT_DIR$/attendance/vendor/psr/log" />
+      <path value="$PROJECT_DIR$/attendance/vendor/textalk/websocket" />
+      <path value="$PROJECT_DIR$/attendance/vendor/ramsey/collection" />
+      <path value="$PROJECT_DIR$/attendance/vendor/brick/math" />
+      <path value="$PROJECT_DIR$/attendance/vendor/ramsey/uuid" />
+      <path value="$PROJECT_DIR$/attendance/vendor/doctrine/annotations" />
+      <path value="$PROJECT_DIR$/attendance/vendor/doctrine/lexer" />
+      <path value="$PROJECT_DIR$/attendance/vendor/firebase/php-jwt" />
+      <path value="$PROJECT_DIR$/attendance/vendor/microsoft/kiota-abstractions" />
+      <path value="$PROJECT_DIR$/attendance/vendor/microsoft/kiota-authentication-phpleague" />
+      <path value="$PROJECT_DIR$/attendance/vendor/microsoft/kiota-http-guzzle" />
+      <path value="$PROJECT_DIR$/attendance/vendor/microsoft/kiota-serialization-form" />
+      <path value="$PROJECT_DIR$/attendance/vendor/microsoft/kiota-serialization-json" />
+      <path value="$PROJECT_DIR$/attendance/vendor/microsoft/kiota-serialization-multipart" />
+      <path value="$PROJECT_DIR$/attendance/vendor/microsoft/kiota-serialization-text" />
+      <path value="$PROJECT_DIR$/attendance/vendor/microsoft/microsoft-graph" />
+      <path value="$PROJECT_DIR$/attendance/vendor/microsoft/microsoft-graph-core" />
+      <path value="$PROJECT_DIR$/attendance/vendor/psr/http-client" />
+      <path value="$PROJECT_DIR$/attendance/vendor/psr/cache" />
+      <path value="$PROJECT_DIR$/attendance/vendor/league/oauth2-client" />
+      <path value="$PROJECT_DIR$/attendance/vendor/guzzlehttp/guzzle" />
+      <path value="$PROJECT_DIR$/attendance/vendor/open-telemetry/sem-conv" />
+      <path value="$PROJECT_DIR$/attendance/vendor/php-http/discovery" />
+      <path value="$PROJECT_DIR$/attendance/vendor/guzzlehttp/promises" />
+      <path value="$PROJECT_DIR$/attendance/vendor/open-telemetry/context" />
+      <path value="$PROJECT_DIR$/attendance/vendor/php-http/promise" />
+      <path value="$PROJECT_DIR$/attendance/vendor/open-telemetry/api" />
+      <path value="$PROJECT_DIR$/attendance/vendor/open-telemetry/sdk" />
+      <path value="$PROJECT_DIR$/attendance/vendor/symfony/polyfill-php82" />
+      <path value="$PROJECT_DIR$/attendance/vendor/nyholm/psr7-server" />
+      <path value="$PROJECT_DIR$/attendance/vendor/tbachert/spi" />
+      <path value="$PROJECT_DIR$/attendance/vendor/stduritemplate/stduritemplate" />
+      <path value="$PROJECT_DIR$/attendance/vendor/symfony/polyfill-ctype" />
+      <path value="$PROJECT_DIR$/attendance/vendor/symfony/polyfill-php80" />
+      <path value="$PROJECT_DIR$/attendance/vendor/phpoption/phpoption" />
+      <path value="$PROJECT_DIR$/attendance/vendor/graham-campbell/result-type" />
+      <path value="$PROJECT_DIR$/attendance/vendor/vlucas/phpdotenv" />
+      <path value="$PROJECT_DIR$/attendance/vendor/phrity/net-uri" />
+      <path value="$PROJECT_DIR$/attendance/vendor/phrity/util-errorhandler" />
+    </include_path>
+  </component>
+  <component name="PhpProjectSharedConfiguration" php_language_level="8.2">
+    <option name="suggestChangeDefaultLanguageLevel" value="false" />
+  </component>
+  <component name="PhpStanOptionsConfiguration">
+    <option name="transferred" value="true" />
+  </component>
+  <component name="PhpUnit">
+    <phpunit_settings>
+      <PhpUnitSettings custom_loader_path="$PROJECT_DIR$/attendance/vendor/autoload.php" />
+    </phpunit_settings>
+  </component>
+  <component name="PsalmOptionsConfiguration">
+    <option name="transferred" value="true" />
+  </component>
+</project>

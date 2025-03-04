@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="2575f01a-112a-49d8-809a-27d08c7c504f" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
+    <pharConfigPath>$PROJECT_DIR$/attendance/composer.json</pharConfigPath>
+    <execution>
+      <executable path="composer" />
+    </execution>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="PHP">
+    <include_path>
+      <path value="$PROJECT_DIR$/attendance/vendor/react/dns" />
+      <path value="$PROJECT_DIR$/attendance/vendor/react/event-loop" />
+      <path value="$PROJECT_DIR$/attendance/vendor/react/promise" />
+      <path value="$PROJECT_DIR$/attendance/vendor/react/socket" />
+      <path value="$PROJECT_DIR$/attendance/vendor/react/stream" />
+      <path value="$PROJECT_DIR$/attendance/vendor/cboden/ratchet" />
+      <path value="$PROJECT_DIR$/attendance/vendor/ratchet/rfc6455" />
+      <path value="$PROJECT_DIR$/attendance/vendor/symfony/deprecation-contracts" />
+      <path value="$PROJECT_DIR$/attendance/vendor/symfony/http-foundation" />
+      <path value="$PROJECT_DIR$/attendance/vendor/symfony/polyfill-mbstring" />
+      <path value="$PROJECT_DIR$/attendance/vendor/symfony/polyfill-php83" />
+      <path value="$PROJECT_DIR$/attendance/vendor/symfony/routing" />
+      <path value="$PROJECT_DIR$/attendance/vendor/composer" />
+      <path value="$PROJECT_DIR$/attendance/vendor/evenement/evenement" />
+      <path value="$PROJECT_DIR$/attendance/vendor/ralouphie/getallheaders" />
+      <path value="$PROJECT_DIR$/attendance/vendor/guzzlehttp/psr7" />
+      <path value="$PROJECT_DIR$/attendance/vendor/psr/http-factory" />
+      <path value="$PROJECT_DIR$/attendance/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/attendance/vendor/react/cache" />
+      <path value="$PROJECT_DIR$/attendance/vendor/psr/log" />
+      <path value="$PROJECT_DIR$/attendance/vendor/textalk/websocket" />
+      <path value="$PROJECT_DIR$/attendance/vendor/ramsey/collection" />
+      <path value="$PROJECT_DIR$/attendance/vendor/brick/math" />
+      <path value="$PROJECT_DIR$/attendance/vendor/ramsey/uuid" />
+      <path value="$PROJECT_DIR$/attendance/vendor/doctrine/annotations" />
+      <path value="$PROJECT_DIR$/attendance/vendor/doctrine/lexer" />
+      <path value="$PROJECT_DIR$/attendance/vendor/firebase/php-jwt" />
+      <path value="$PROJECT_DIR$/attendance/vendor/microsoft/kiota-abstractions" />
+      <path value="$PROJECT_DIR$/attendance/vendor/microsoft/kiota-authentication-phpleague" />
+      <path value="$PROJECT_DIR$/attendance/vendor/microsoft/kiota-http-guzzle" />
+      <path value="$PROJECT_DIR$/attendance/vendor/microsoft/kiota-serialization-form" />
+      <path value="$PROJECT_DIR$/attendance/vendor/microsoft/kiota-serialization-json" />
+      <path value="$PROJECT_DIR$/attendance/vendor/microsoft/kiota-serialization-multipart" />
+      <path value="$PROJECT_DIR$/attendance/vendor/microsoft/kiota-serialization-text" />
+      <path value="$PROJECT_DIR$/attendance/vendor/microsoft/microsoft-graph" />
+      <path value="$PROJECT_DIR$/attendance/vendor/microsoft/microsoft-graph-core" />
+      <path value="$PROJECT_DIR$/attendance/vendor/psr/http-client" />
+      <path value="$PROJECT_DIR$/attendance/vendor/psr/cache" />
+      <path value="$PROJECT_DIR$/attendance/vendor/league/oauth2-client" />
+      <path value="$PROJECT_DIR$/attendance/vendor/guzzlehttp/guzzle" />
+      <path value="$PROJECT_DIR$/attendance/vendor/open-telemetry/sem-conv" />
+      <path value="$PROJECT_DIR$/attendance/vendor/php-http/discovery" />
+      <path value="$PROJECT_DIR$/attendance/vendor/guzzlehttp/promises" />
+      <path value="$PROJECT_DIR$/attendance/vendor/open-telemetry/context" />
+      <path value="$PROJECT_DIR$/attendance/vendor/php-http/promise" />
+      <path value="$PROJECT_DIR$/attendance/vendor/open-telemetry/api" />
+      <path value="$PROJECT_DIR$/attendance/vendor/open-telemetry/sdk" />
+      <path value="$PROJECT_DIR$/attendance/vendor/symfony/polyfill-php82" />
+      <path value="$PROJECT_DIR$/attendance/vendor/nyholm/psr7-server" />
+      <path value="$PROJECT_DIR$/attendance/vendor/tbachert/spi" />
+      <path value="$PROJECT_DIR$/attendance/vendor/stduritemplate/stduritemplate" />
+      <path value="$PROJECT_DIR$/attendance/vendor/symfony/polyfill-ctype" />
+      <path value="$PROJECT_DIR$/attendance/vendor/symfony/polyfill-php80" />
+      <path value="$PROJECT_DIR$/attendance/vendor/phpoption/phpoption" />
+      <path value="$PROJECT_DIR$/attendance/vendor/graham-campbell/result-type" />
+      <path value="$PROJECT_DIR$/attendance/vendor/vlucas/phpdotenv" />
+      <path value="$PROJECT_DIR$/attendance/vendor/phrity/net-uri" />
+      <path value="$PROJECT_DIR$/attendance/vendor/phrity/util-errorhandler" />
+    </include_path>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2tXVEO9gi2DDlreSDmETuJBGy60" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "HTTP Request.scratch | #1.executor": "Run",
+    "JavaScript Debug.index.php.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "E:/OneDrive - Schule/OneDrive - tgm - Die Schule der Technik/Desktop/Programmieren/tgm Anwesenheitskontrolle/attendance/api",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "php.override.implement.member.chooser.php.doc": "NONE",
+    "settings.editor.selected.configurable": "web.server",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mariadb"
+    ],
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "HTTP Request"
+    ]
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\OneDrive - Schule\OneDrive - tgm - Die Schule der Technik\Desktop\Programmieren\tgm Anwesenheitskontrolle\attendance\api" />
+      <recent name="E:\OneDrive - Schule\OneDrive - tgm - Die Schule der Technik\Desktop\Programmieren\tgm Anwesenheitskontrolle" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\OneDrive - Schule\OneDrive - tgm - Die Schule der Technik\Desktop\Programmieren\tgm Anwesenheitskontrolle\attendance\api" />
+      <recent name="E:\OneDrive - Schule\OneDrive - tgm - Die Schule der Technik\Desktop\Programmieren\tgm Anwesenheitskontrolle\attendance" />
+      <recent name="E:\OneDrive - Schule\OneDrive - tgm - Die Schule der Technik\Desktop\Programmieren\tgm Anwesenheitskontrolle\attendence" />
+      <recent name="E:\OneDrive - Schule\OneDrive - tgm - Die Schule der Technik\Desktop\Programmieren\tgm Anwesenheitskontrolle\testing" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JavaScript Debug.index.php">
+    <configuration name="scratch | #1" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/scratch.http" requestIdentifier="#1" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="index.php" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/tgm Anwesenheitskontrolle/attendance/index.php" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JavaScript Debug.index.php" />
+        <item itemvalue="HTTP Request.scratch | #1" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-PS-242.21829.154" />
+        <option value="bundled-php-predefined-a98d8de5180a-4d9f4c849d09-com.jetbrains.php.sharedIndexes-PS-242.21829.154" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2575f01a-112a-49d8-809a-27d08c7c504f" name="Changes" comment="" />
+      <created>1740498294081</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1740498294081</updated>
+      <workItem from="1740498295121" duration="3438000" />
+      <workItem from="1740656440474" duration="5441000" />
+      <workItem from="1740690793385" duration="1917000" />
+      <workItem from="1740746649630" duration="1461000" />
+      <workItem from="1740768136722" duration="1503000" />
+      <workItem from="1740771079157" duration="10839000" />
+      <workItem from="1740833965123" duration="7018000" />
+      <workItem from="1740843674375" duration="4548000" />
+      <workItem from="1740850200649" duration="4171000" />
+      <workItem from="1740859009092" duration="7277000" />
+      <workItem from="1740866337206" duration="658000" />
+      <workItem from="1740867033170" duration="1122000" />
+      <workItem from="1740868217504" duration="3000" />
+      <workItem from="1740929664055" duration="14447000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

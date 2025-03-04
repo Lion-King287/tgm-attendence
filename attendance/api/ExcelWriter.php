@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 require '../vendor/autoload.php';
 
@@ -118,7 +120,7 @@ class ExcelWriter {
 
             // Überprüfe den Response-Status
             if ($response->getStatusCode() == 200) {
-                echo "Wert erfolgreich in den Bereich $startCell:$endCell geschrieben!" . PHP_EOL;
+                //echo "Wert erfolgreich in den Bereich $startCell:$endCell geschrieben!" . PHP_EOL;
             } else {
                 echo "Fehler beim Schreiben in den Bereich $startCell:$endCell: " . $response->getStatusCode() . PHP_EOL;
             }

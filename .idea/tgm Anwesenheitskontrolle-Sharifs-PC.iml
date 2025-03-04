@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/attendance/spec" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/.tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/temp" />
+      <excludeFolder url="file://$MODULE_DIR$/tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/cboden/ratchet" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/evenement/evenement" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/guzzlehttp/psr7" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/psr/http-factory" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/psr/http-message" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/psr/log" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/ralouphie/getallheaders" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/ratchet/rfc6455" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/react/cache" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/react/dns" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/react/event-loop" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/react/promise" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/react/socket" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/react/stream" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/symfony/deprecation-contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/symfony/http-foundation" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/symfony/polyfill-mbstring" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/symfony/polyfill-php83" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/symfony/routing" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/textalk/websocket" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/brick/math" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/doctrine/annotations" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/doctrine/lexer" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/firebase/php-jwt" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/guzzlehttp/guzzle" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/guzzlehttp/promises" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/league/oauth2-client" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/microsoft/kiota-abstractions" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/microsoft/kiota-authentication-phpleague" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/microsoft/kiota-http-guzzle" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/microsoft/kiota-serialization-form" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/microsoft/kiota-serialization-json" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/microsoft/kiota-serialization-multipart" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/microsoft/kiota-serialization-text" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/microsoft/microsoft-graph" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/microsoft/microsoft-graph-core" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/nyholm/psr7-server" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/open-telemetry/api" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/open-telemetry/context" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/open-telemetry/sdk" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/open-telemetry/sem-conv" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/php-http/discovery" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/php-http/promise" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/psr/cache" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/psr/http-client" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/ramsey/collection" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/ramsey/uuid" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/stduritemplate/stduritemplate" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/symfony/polyfill-php82" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/tbachert/spi" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/graham-campbell/result-type" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/phpoption/phpoption" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/symfony/polyfill-ctype" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/symfony/polyfill-php80" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/vlucas/phpdotenv" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/phrity/net-uri" />
+      <excludeFolder url="file://$MODULE_DIR$/attendance/vendor/phrity/util-errorhandler" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
