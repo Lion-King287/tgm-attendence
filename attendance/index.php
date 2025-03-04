@@ -259,7 +259,7 @@ $subjects = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         // Get current time
         var now = new Date();
-        var currentTime = now.getHours() + ':' + ('0' + now.getMinutes()).slice(-2);
+        var currentTime = ('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2);
 
         // Preselect the current lesson unit
         lessonTimes.forEach(function (lesson) {

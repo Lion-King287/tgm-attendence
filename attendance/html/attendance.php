@@ -25,7 +25,7 @@ $roomName = $_POST['room'];
 $date = $_POST['date'];
 $units = $_POST['units'];
 $subject = $_POST['subject'];
-$teacherShortName = 'STRR';
+$teacherShortName = '';
 
 // Anwesenheitsdaten abrufen
 $attendances = [];
@@ -34,8 +34,10 @@ $attendances = [];
 $fullName = isset($_SESSION['cn']) ? $_SESSION['cn'] : "Unbekannt";
 if ($_SESSION['employeeType'] === "lehrer") {
     $role = "Lehrkraft";
+    $teacherShortName = $_SESSION['employeeNumber'];
 } else if ($_SESSION['employeeType'] === "schueler") {
     $role = "Schüler";
+    $teacherShortName = 'KARS';
 } else {
     $role = "Unbekannte Rolle";
 }
@@ -160,22 +162,25 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="assignCardModalLabel">Assign Card to Student</h5>
+                <h5 class="modal-title" id="assignCardModalLabel">Karte zuweisen?</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                <div class="alert alert-warning" role="alert">
+                    Eine unbekannte Karte wurde gescannt, wollen Sie diese einem Schüler zuweisen?
+                </div>
                 <form id="assignCardForm">
                     <div class="mb-3">
-                        <label for="classSelect" class="form-label">Class</label>
+                        <label for="classSelect" class="form-label">Klasse</label>
                         <select class="form-select" id="classSelect" required>
-                            <option value="" selected disabled>Select a class</option>
+                            <option value="" selected disabled>Wähle eine Klasse</option>
                             <!-- Options will be populated dynamically -->
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="studentSelect" class="form-label">Student</label>
+                        <label for="studentSelect" class="form-label">Schüler</label>
                         <select class="form-select" id="studentSelect" required>
-                            <option value="" selected disabled>Select a student</option>
+                            <option value="" selected disabled>Wähle einen Schüler</option>
                             <!-- Options will be populated dynamically -->
                         </select>
                     </div>
@@ -183,8 +188,8 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="assignCardButton">Assign</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+                <button type="button" class="btn btn-primary" id="assignCardButton">Zuweisen</button>
             </div>
         </div>
     </div>
@@ -404,8 +409,11 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
                 // Sort classes alphabetically
                 classes.sort((a, b) => a.class.localeCompare(b.class));
 
+                var studentSelect = document.getElementById('studentSelect');
+                studentSelect.innerHTML = '<option value="" selected disabled>Wähle einen Schüler</option>';
+
                 var classSelect = document.getElementById('classSelect');
-                classSelect.innerHTML = '<option value="" selected disabled>Select a class</option>';
+                classSelect.innerHTML = '<option value="" selected disabled>Wähle eine Klasse</option>';
                 classes.forEach(cls => {
                     var option = document.createElement('option');
                     option.value = cls.class; // Ensure this matches the key in the returned JSON
@@ -430,7 +438,7 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
                 });
 
                 var studentSelect = document.getElementById('studentSelect');
-                studentSelect.innerHTML = '<option value="" selected disabled>Select a student</option>';
+                studentSelect.innerHTML = '<option value="" selected disabled>Wähle einen Schüler</option>';
                 students.forEach(student => {
                     var option = document.createElement('option');
                     option.value = student.username;
@@ -453,7 +461,6 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
         .then(response => response.json())
         .then(result => {
             if (result.success) {
-                alert('Card assigned successfully!');
                 var assignCardModal = bootstrap.Modal.getInstance(document.getElementById('assignCardModal'));
                 assignCardModal.hide();
             } else {
