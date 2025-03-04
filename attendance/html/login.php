@@ -89,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var toastEl = document.getElementById('logoutToast');
-            var toast = new bootstrap.Toast(toastEl, { delay: 2500 });
+            var toast = new bootstrap.Toast(toastEl, {delay: 2500});
             toast.show();
         });
     </script>

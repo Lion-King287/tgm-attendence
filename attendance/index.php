@@ -71,7 +71,7 @@ $subjects = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var toastEl = document.getElementById('logoutToast');
-            var toast = new bootstrap.Toast(toastEl, { delay: 2500 });
+            var toast = new bootstrap.Toast(toastEl, {delay: 2500});
             toast.show();
         });
     </script>
@@ -191,37 +191,48 @@ $subjects = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="mb-3">
                         <i class="bi bi-clock"></i> <label class="form-label">Unterrichtseinheiten</label>
                         <div class="btn-group" role="group" aria-label="Unterrichtseinheiten">
-                            <input type="checkbox" class="btn-check" id="unit1" name="units[]" value="1" autocomplete="off">
+                            <input type="checkbox" class="btn-check" id="unit1" name="units[]" value="1"
+                                   autocomplete="off">
                             <label class="btn btn-outline-primary" for="unit1">1</label>
 
-                            <input type="checkbox" class="btn-check" id="unit2" name="units[]" value="2" autocomplete="off">
+                            <input type="checkbox" class="btn-check" id="unit2" name="units[]" value="2"
+                                   autocomplete="off">
                             <label class="btn btn-outline-primary" for="unit2">2</label>
 
-                            <input type="checkbox" class="btn-check" id="unit3" name="units[]" value="3" autocomplete="off">
+                            <input type="checkbox" class="btn-check" id="unit3" name="units[]" value="3"
+                                   autocomplete="off">
                             <label class="btn btn-outline-primary" for="unit3">3</label>
 
-                            <input type="checkbox" class="btn-check" id="unit4" name="units[]" value="4" autocomplete="off">
+                            <input type="checkbox" class="btn-check" id="unit4" name="units[]" value="4"
+                                   autocomplete="off">
                             <label class="btn btn-outline-primary" for="unit4">4</label>
 
-                            <input type="checkbox" class="btn-check" id="unit5" name="units[]" value="5" autocomplete="off">
+                            <input type="checkbox" class="btn-check" id="unit5" name="units[]" value="5"
+                                   autocomplete="off">
                             <label class="btn btn-outline-primary" for="unit5">5</label>
 
-                            <input type="checkbox" class="btn-check" id="unit6" name="units[]" value="6" autocomplete="off">
+                            <input type="checkbox" class="btn-check" id="unit6" name="units[]" value="6"
+                                   autocomplete="off">
                             <label class="btn btn-outline-primary" for="unit6">6</label>
 
-                            <input type="checkbox" class="btn-check" id="unit7" name="units[]" value="7" autocomplete="off">
+                            <input type="checkbox" class="btn-check" id="unit7" name="units[]" value="7"
+                                   autocomplete="off">
                             <label class="btn btn-outline-primary" for="unit7">7</label>
 
-                            <input type="checkbox" class="btn-check" id="unit8" name="units[]" value="8" autocomplete="off">
+                            <input type="checkbox" class="btn-check" id="unit8" name="units[]" value="8"
+                                   autocomplete="off">
                             <label class="btn btn-outline-primary" for="unit8">8</label>
 
-                            <input type="checkbox" class="btn-check" id="unit9" name="units[]" value="9" autocomplete="off">
+                            <input type="checkbox" class="btn-check" id="unit9" name="units[]" value="9"
+                                   autocomplete="off">
                             <label class="btn btn-outline-primary" for="unit9">9</label>
 
-                            <input type="checkbox" class="btn-check" id="unit10" name="units[]" value="10" autocomplete="off">
+                            <input type="checkbox" class="btn-check" id="unit10" name="units[]" value="10"
+                                   autocomplete="off">
                             <label class="btn btn-outline-primary" for="unit10">10</label>
 
-                            <input type="checkbox" class="btn-check" id="unit11" name="units[]" value="11" autocomplete="off">
+                            <input type="checkbox" class="btn-check" id="unit11" name="units[]" value="11"
+                                   autocomplete="off">
                             <label class="btn btn-outline-primary" for="unit11">11</label>
                         </div>
                     </div>
@@ -244,17 +255,17 @@ $subjects = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         // Lesson times
         var lessonTimes = [
-            { start: '08:00', end: '08:50', unit: 'unit1' },
-            { start: '08:50', end: '09:40', unit: 'unit2' },
-            { start: '09:50', end: '10:40', unit: 'unit3' },
-            { start: '10:40', end: '11:30', unit: 'unit4' },
-            { start: '11:30', end: '12:20', unit: 'unit5' },
-            { start: '12:30', end: '13:20', unit: 'unit6' },
-            { start: '13:20', end: '14:10', unit: 'unit7' },
-            { start: '14:10', end: '15:00', unit: 'unit8' },
-            { start: '15:10', end: '16:00', unit: 'unit9' },
-            { start: '16:00', end: '16:50', unit: 'unit10' },
-            { start: '17:00', end: '17:45', unit: 'unit11' }
+            {start: '08:00', end: '08:50', unit: 'unit1'},
+            {start: '08:50', end: '09:40', unit: 'unit2'},
+            {start: '09:50', end: '10:40', unit: 'unit3'},
+            {start: '10:40', end: '11:30', unit: 'unit4'},
+            {start: '11:30', end: '12:20', unit: 'unit5'},
+            {start: '12:30', end: '13:20', unit: 'unit6'},
+            {start: '13:20', end: '14:10', unit: 'unit7'},
+            {start: '14:10', end: '15:00', unit: 'unit8'},
+            {start: '15:10', end: '16:00', unit: 'unit9'},
+            {start: '16:00', end: '16:50', unit: 'unit10'},
+            {start: '17:00', end: '17:45', unit: 'unit11'}
         ];
 
         // Get current time

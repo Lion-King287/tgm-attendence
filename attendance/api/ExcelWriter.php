@@ -7,25 +7,24 @@ require '../vendor/autoload.php';
 
 use GuzzleHttp\Client;
 
-class ExcelWriter {
+class ExcelWriter
+{
 
     private string $accessToken;
     private string $filePath;
     private string $fileId;
 
-    public function __construct(string $accessToken, string $filePath) {
+    public function __construct(string $accessToken, string $filePath)
+    {
         $this->accessToken = $accessToken;
         $this->filePath = $filePath;
         $this->fileId = $this->getFileId();
     }
 
     // Initialisiere HTTP-Client
-    private function initializeHttpClient(): Client {
-        return new Client();
-    }
 
-    // Hole die Datei-ID
-    private function getFileId(): string {
+    private function getFileId(): string
+    {
         try {
             $client = $this->initializeHttpClient();
 
@@ -61,8 +60,17 @@ class ExcelWriter {
         return '';
     }
 
+    // Hole die Datei-ID
+
+    private function initializeHttpClient(): Client
+    {
+        return new Client();
+    }
+
     // Schreibe in Excel
-    public function writeToExcelRangeWithGaps(string $sheetName, array $cells): void {
+
+    public function writeToExcelRangeWithGaps(string $sheetName, array $cells): void
+    {
         // Berechne den Bereich
         $minRow = PHP_INT_MAX;
         $maxRow = 0;
@@ -129,7 +137,8 @@ class ExcelWriter {
         }
     }
 
-    public function readFromExcelRange(string $sheetName, string $startCell, string $endCell): array {
+    public function readFromExcelRange(string $sheetName, string $startCell, string $endCell): array
+    {
         try {
             $client = $this->initializeHttpClient();
 
@@ -160,34 +169,35 @@ class ExcelWriter {
         }
     }
 
-    public function readFromExcelCell(string $sheetName, string $cell): string {
-    try {
-        $client = $this->initializeHttpClient();
+    public function readFromExcelCell(string $sheetName, string $cell): string
+    {
+        try {
+            $client = $this->initializeHttpClient();
 
-        // API URL für den GET-Request
-        $url = "https://graph.microsoft.com/v1.0/me/drive/items/" . $this->fileId . "/workbook/worksheets/" . $sheetName . "/range(address='" . $cell . "')";
+            // API URL für den GET-Request
+            $url = "https://graph.microsoft.com/v1.0/me/drive/items/" . $this->fileId . "/workbook/worksheets/" . $sheetName . "/range(address='" . $cell . "')";
 
-        // Header für den Request (Authorization)
-        $headers = [
-            'Authorization' => 'Bearer ' . $this->accessToken,
-            'Content-Type' => 'application/json'
-        ];
+            // Header für den Request (Authorization)
+            $headers = [
+                'Authorization' => 'Bearer ' . $this->accessToken,
+                'Content-Type' => 'application/json'
+            ];
 
-        // GET-Request an Microsoft Graph API
-        $response = $client->request('GET', $url, [
-            'headers' => $headers
-        ]);
+            // GET-Request an Microsoft Graph API
+            $response = $client->request('GET', $url, [
+                'headers' => $headers
+            ]);
 
-        // Überprüfe den Response-Status
-        if ($response->getStatusCode() == 200) {
-            $data = json_decode($response->getBody(), true);
-            return $data['values'][0][0];
-        } else {
-            throw new Exception("Fehler beim Lesen der Zelle $cell: " . $response->getStatusCode());
+            // Überprüfe den Response-Status
+            if ($response->getStatusCode() == 200) {
+                $data = json_decode($response->getBody(), true);
+                return $data['values'][0][0];
+            } else {
+                throw new Exception("Fehler beim Lesen der Zelle $cell: " . $response->getStatusCode());
+            }
+        } catch (Exception $e) {
+            echo 'Fehler: ' . $e->getMessage() . PHP_EOL;
+            return '';
         }
-    } catch (Exception $e) {
-        echo 'Fehler: ' . $e->getMessage() . PHP_EOL;
-        return '';
     }
-}
 }

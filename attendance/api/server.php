@@ -6,19 +6,23 @@ use Ratchet\Server\IoServer;
 use Ratchet\WebSocket\WsServer;
 
 // Eigene WebSocket-Klasse
-class Chat implements Ratchet\MessageComponentInterface {
+class Chat implements Ratchet\MessageComponentInterface
+{
     protected $clients;
 
-    public function __construct() {
-        $this->clients = new \SplObjectStorage;
+    public function __construct()
+    {
+        $this->clients = new SplObjectStorage;
     }
 
-    public function onOpen(Ratchet\ConnectionInterface $conn) {
+    public function onOpen(Ratchet\ConnectionInterface $conn)
+    {
         $this->clients->attach($conn);
         echo "Neue Verbindung ({$conn->resourceId})\n";
     }
 
-    public function onMessage(Ratchet\ConnectionInterface $from, $msg) {
+    public function onMessage(Ratchet\ConnectionInterface $from, $msg)
+    {
         echo "Nachricht erhalten: $msg\n";
 
         foreach ($this->clients as $client) {
@@ -28,12 +32,14 @@ class Chat implements Ratchet\MessageComponentInterface {
         }
     }
 
-    public function onClose(Ratchet\ConnectionInterface $conn) {
+    public function onClose(Ratchet\ConnectionInterface $conn)
+    {
         $this->clients->detach($conn);
         echo "Verbindung geschlossen ({$conn->resourceId})\n";
     }
 
-    public function onError(Ratchet\ConnectionInterface $conn, \Exception $e) {
+    public function onError(Ratchet\ConnectionInterface $conn, Exception $e)
+    {
         echo "Fehler: {$e->getMessage()}\n";
         $conn->close();
     }

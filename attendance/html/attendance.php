@@ -63,7 +63,8 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
         <div class="container-fluid">
             <a class="navbar-brand me-4" href="#">
                 <div>
-                    <img alt="Logo" class="d-inline-block align-text-top" src="../img/tgm_logo_light.svg" width="70" onclick="window.location.href='../index.php'">
+                    <img alt="Logo" class="d-inline-block align-text-top" src="../img/tgm_logo_light.svg" width="70"
+                         onclick="window.location.href='../index.php'">
                 </div>
                 <div>
                     Anwesenheiten
@@ -74,7 +75,9 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
                     <div class="d-flex align-items-center justify-content-between">
                         <ul class="navbar-nav me-auto">
                             <li class="nav-item">
-                                <button class="btn btn-primary me-2 mb-1" onclick="window.location.href='../index.php'">Startseite</button>
+                                <button class="btn btn-primary me-2 mb-1" onclick="window.location.href='../index.php'">
+                                    Startseite
+                                </button>
                             </li>
                             <li class="nav-item">
                                 <button class="btn btn-outline-primary me-2 mb-1"
@@ -125,17 +128,25 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
                 <h1 class="mt-3">Anwesenheitskontrolle</h1>
                 <div class="d-flex justify-content-center">
                     <h4>
-                        <span class="badge bg-success me-2"><i class="bi bi-door-closed"></i> <?php echo htmlspecialchars($roomName); ?></span>
-                        <span class="badge bg-primary me-2"><i class="bi bi-journal-text"></i> <?php echo htmlspecialchars($subject); ?></span>
-                        <span class="badge bg-secondary me-2"><i class="bi bi-calendar-event"></i> <?php $dateObj = new DateTime($date); echo htmlspecialchars($dateObj->format('d.m.Y')); ?></span>
-                        <span class="badge bg-secondary me-2"><i class="bi bi-clock"></i> <?php echo htmlspecialchars(implode(', ', $units)); ?></span>
-                        <span class="badge bg-secondary me-2"><i class="bi bi-person"></i> <?php echo htmlspecialchars($teacherShortName); ?></span>
+                        <span class="badge bg-success me-2"><i
+                                    class="bi bi-door-closed"></i> <?php echo htmlspecialchars($roomName); ?></span>
+                        <span class="badge bg-primary me-2"><i
+                                    class="bi bi-journal-text"></i> <?php echo htmlspecialchars($subject); ?></span>
+                        <span class="badge bg-secondary me-2"><i
+                                    class="bi bi-calendar-event"></i> <?php $dateObj = new DateTime($date);
+                            echo htmlspecialchars($dateObj->format('d.m.Y')); ?></span>
+                        <span class="badge bg-secondary me-2"><i
+                                    class="bi bi-clock"></i> <?php echo htmlspecialchars(implode(', ', $units)); ?></span>
+                        <span class="badge bg-secondary me-2"><i
+                                    class="bi bi-person"></i> <?php echo htmlspecialchars($teacherShortName); ?></span>
                     </h4>
                 </div>
                 <div class="text-center mt-1">
                     <h4>
-                        <span class="badge bg-secondary me-2"><i class="bi bi-person-check"></i> Erfasste Personen: <span id="attendanceCount">0</span></span>
-                        <button class="btn btn-success badge" id="exportButton" >Ins Klassenbuch übertragen</button>
+                        <span class="badge bg-secondary me-2"><i
+                                    class="bi bi-person-check"></i> Erfasste Personen: <span
+                                    id="attendanceCount">0</span></span>
+                        <button class="btn btn-success badge" id="exportButton">Ins Klassenbuch übertragen</button>
                     </h4>
                 </div>
             </div>
@@ -218,11 +229,11 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
     document.addEventListener('DOMContentLoaded', function () {
         var socket = new WebSocket('ws://localhost:8080');
 
-        socket.onopen = function() {
+        socket.onopen = function () {
             console.log('WebSocket connection established');
         };
 
-        socket.onmessage = function(event) {
+        socket.onmessage = function (event) {
             var data = JSON.parse(event.data);
             if (!data.room === '<?php echo $roomName; ?>') {
                 return;
@@ -241,11 +252,11 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
             }
         };
 
-        socket.onerror = function(error) {
+        socket.onerror = function (error) {
             console.error('WebSocket error:', error);
         };
 
-        socket.onclose = function() {
+        socket.onclose = function () {
             console.log('WebSocket connection closed');
         };
     });
@@ -293,8 +304,14 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
         }
 
         const tableBody = document.getElementById('class-' + data.class + '-body');
-        const newRow = document.createElement('tr');
 
+        // Check if the student is already in the table
+        const existingRow = Array.from(tableBody.rows).find(row => row.cells[0].innerText == data.catalog_number);
+        if (existingRow) {
+            return; // Skip if the student is already present
+        }
+
+        const newRow = document.createElement('tr');
         newRow.innerHTML = `
     <td>${data.catalog_number}</td>
     <td>${data.lastname}</td>
@@ -488,18 +505,18 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ card_id: cardId, student_username: studentUsername })
+            body: JSON.stringify({card_id: cardId, student_username: studentUsername})
         })
-        .then(response => response.json())
-        .then(result => {
-            if (result.success) {
-                var assignCardModal = bootstrap.Modal.getInstance(document.getElementById('assignCardModal'));
-                assignCardModal.hide();
-            } else {
-                alert('Error assigning card: ' + result.error);
-            }
-        })
-        .catch(error => console.error('Error assigning card:', error));
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    var assignCardModal = bootstrap.Modal.getInstance(document.getElementById('assignCardModal'));
+                    assignCardModal.hide();
+                } else {
+                    alert('Error assigning card: ' + result.error);
+                }
+            })
+            .catch(error => console.error('Error assigning card:', error));
     }
 </script>
 
