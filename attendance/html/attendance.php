@@ -388,6 +388,13 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
     });
 
     document.getElementById('exportButton').addEventListener('click', async function () {
+        document.getElementById('exportModalBody').innerHTML = `
+            <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p>Daten werden ins Klassenbuch übertragen...</p>
+        `;
+
         const attendanceTables = document.getElementById('attendanceTables');
         const classTables = attendanceTables.querySelectorAll('div[id^="class-"]');
         const students = [];
@@ -400,12 +407,14 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
                 const catalogNumber = row.cells[0].innerText;
                 const firstName = row.cells[1].innerText;
                 const lastName = row.cells[2].innerText;
+                const lateMinutes = row.querySelector('.late-minutes').value;
 
                 students.push({
                     class: className,
                     catalog_number: catalogNumber,
                     firstname: firstName,
-                    lastname: lastName
+                    lastname: lastName,
+                    late_minutes: lateMinutes
                 });
             });
         });
@@ -431,23 +440,26 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
                 body: JSON.stringify(dataToSend)
             });
 
-            const result = await response.json(); // Parse the response as JSON
+            const responseText = await response.text(); // Get the response text
+            console.log(responseText); // Log the response text
+
+            const result = JSON.parse(responseText); // Parse the response as JSON
 
             if (!response.ok) throw new Error(result.error || 'Fehler beim Exportieren der Daten!');
 
             document.getElementById('exportModalBody').innerHTML = `
-            <div class="alert alert-success fade show" role="alert">
-                Daten erfolgreich exportiert!
-            </div>
-            <button type="button" class="btn btn-secondary mt-3" data-bs-dismiss="modal">Schließen</button>
-        `;
+        <div class="alert alert-success fade show" role="alert">
+            Daten erfolgreich exportiert!
+        </div>
+        <button type="button" class="btn btn-secondary mt-3" data-bs-dismiss="modal">Schließen</button>
+    `;
         } catch (error) {
             document.getElementById('exportModalBody').innerHTML = `
-            <div class="alert alert-danger fade show" role="alert">
-                Fehler beim Exportieren der Daten: ${error.message}
-            </div>
-            <button type="button" class="btn btn-secondary mt-3" data-bs-dismiss="modal">Schließen</button>
-        `;
+        <div class="alert alert-danger fade show" role="alert">
+            Fehler beim Exportieren der Daten: ${error.message}
+        </div>
+        <button type="button" class="btn btn-secondary mt-3" data-bs-dismiss="modal">Schließen</button>
+    `;
         }
     });
 

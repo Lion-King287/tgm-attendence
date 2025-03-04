@@ -75,11 +75,16 @@ try {
         // Schreibe die Schülerdaten
         $cells = [];
         foreach ($classStudents as $student) {
-            foreach ($units as $unit) {
+            foreach ($units as $index => $unit) {
                 $column = $unitColumns[$unit][$dayOfWeek - 1];
                 $row = $student['catalog_number'] + 9;
                 $cell = "{$column}{$row}";
-                $cells[$cell] = $subject;
+
+                if ($index == 0 && !empty($student['late_minutes'])) {
+                    $cells[$cell] = 'Z' . $student['late_minutes'];
+                } else {
+                    $cells[$cell] = $subject;
+                }
             }
         }
 
