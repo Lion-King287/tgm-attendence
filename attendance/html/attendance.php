@@ -279,6 +279,7 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
                         <th scope="col">Nachname</th>
                         <th scope="col">Vorname</th>
                         <th scope="col">Uhrzeit</th>
+                        <th scope="col">Zu spät</th>
                         <th scope="col">Aktion</th>
                     </tr>
                 </thead>
@@ -317,6 +318,12 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
     <td>${data.lastname}</td>
     <td>${data.firstname}</td>
     <td>${new Date(data.login_timestamp).toLocaleTimeString()}</td>
+    <td>
+        <div class="row">
+            <input type="checkbox" class="late-checkbox col-1 me-2" onchange="toggleLateInput(this)">
+            <input type="number" class="form-control form-control-sm late-minutes col-1" min="0" placeholder="" style="width: 50px;" disabled>
+        </div>
+    </td>
     <td><button class="btn btn-danger btn-sm" onclick="deleteStudent(this)"><i class="bi bi-trash"></i></button></td>
     `;
 
@@ -336,6 +343,16 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
         updateAttendanceCount();
     }
 
+    function toggleLateInput(checkbox) {
+        const minutesInput = checkbox.closest('td').querySelector('.late-minutes');
+        if (checkbox.checked) {
+            minutesInput.disabled = false;
+        } else {
+            minutesInput.disabled = true;
+            minutesInput.value = ''; // Clear the input field when unchecked
+        }
+    }
+
     function deleteStudent(button) {
         const row = button.closest('tr');
         const tableBody = row.parentElement;
@@ -346,8 +363,6 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
             const classTable = tableBody.closest('div[id^="class-"]');
             classTable.remove();
         }
-
-        updateAttendanceCount();
     }
 
     function updateAttendanceCount() {
