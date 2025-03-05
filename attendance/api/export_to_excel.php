@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+
+
 // Überprüfen, ob der Benutzer eingeloggt ist
 if (!isset($_SESSION['username'])) {
     header("Location: html/login.php");
@@ -10,7 +12,20 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
+if (!isset($_SESSION['microsoft_token'])) {
+    http_response_code(500);
+    echo json_encode(['error' => 'No access token found']);
+    exit;
+}
+
+$accessToken = $_SESSION['microsoft_token'];
 require 'ExcelWriter.php';
+
+if (!ExcelWriter::isMicrosoftTokenValid($accessToken)) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Access token is invalid']);
+    exit;
+}
 
 try {
     // Empfange die JSON-Daten
@@ -31,7 +46,6 @@ try {
     $subject = $decodedData['subject'];
     $teacherShortName = $decodedData['teacherShortName'];
     $students = $decodedData['students'];
-    $accessToken = $_SESSION['microsoft_token'];
 
     // Wochentag und Spaltenzuordnung
     $dayOfWeek = date('N', strtotime($date));

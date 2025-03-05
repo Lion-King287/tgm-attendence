@@ -30,12 +30,36 @@ class ExcelWriter
         $this->fileId = $this->getFileId();
     }
 
-    // Initialisiere HTTP-Client
+    public static function isMicrosoftTokenValid(string $accessToken): bool
+    {
+        try {
+            $client = new Client();
+
+            // API URL for the test request
+            $url = "https://graph.microsoft.com/v1.0/me";
+
+            // Headers for the request (Authorization)
+            $headers = [
+                'Authorization' => 'Bearer ' . $accessToken,
+                'Content-Type' => 'application/json'
+            ];
+
+            // GET request to Microsoft Graph API
+            $response = $client->request('GET', $url, [
+                'headers' => $headers
+            ]);
+
+            // Check the response status
+            return $response->getStatusCode() == 200;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
 
     private function getFileId(): string
     {
         try {
-            $client = $this->initializeHttpClient();
+            $client = new Client();
 
             // API URL für die Suche nach der Datei
             $url = "https://graph.microsoft.com/v1.0/me/drive/root:/Desktop/Schule/Klassenbücher/Tests:/search(q='" . basename($this->filePath) . "')";
@@ -68,15 +92,6 @@ class ExcelWriter
 
         return '';
     }
-
-    // Hole die Datei-ID
-
-    private function initializeHttpClient(): Client
-    {
-        return new Client();
-    }
-
-    // Schreibe in Excel
 
     public function writeToExcelRangeWithGaps(string $sheetName, array $cells): void
     {
@@ -113,7 +128,7 @@ class ExcelWriter
 
         // Schreibe die Werte in den Bereich
         try {
-            $client = $this->initializeHttpClient();
+            $client = new Client();
 
             // API URL für den PATCH-Request
             $url = "https://graph.microsoft.com/v1.0/me/drive/items/" . $this->fileId . "/workbook/worksheets/" . $sheetName . "/range(address='" . $startCell . ":" . $endCell . "')";
@@ -149,7 +164,7 @@ class ExcelWriter
     public function readFromExcelRange(string $sheetName, string $startCell, string $endCell): array
     {
         try {
-            $client = $this->initializeHttpClient();
+            $client = new Client();
 
             // API URL für den GET-Request
             $url = "https://graph.microsoft.com/v1.0/me/drive/items/" . $this->fileId . "/workbook/worksheets/" . $sheetName . "/range(address='" . $startCell . ":" . $endCell . "')";
@@ -181,7 +196,7 @@ class ExcelWriter
     public function readFromExcelCell(string $sheetName, string $cell): string
     {
         try {
-            $client = $this->initializeHttpClient();
+            $client = new Client();
 
             // API URL für den GET-Request
             $url = "https://graph.microsoft.com/v1.0/me/drive/items/" . $this->fileId . "/workbook/worksheets/" . $sheetName . "/range(address='" . $cell . "')";

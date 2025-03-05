@@ -59,6 +59,7 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link href="../img/tgm_logo_triangle.svg" rel="icon" type="image/svg+xml">
     <link href="../css/global_style.css" rel="stylesheet">
+    <script src="https://alcdn.msauth.net/browser/2.28.0/js/msal-browser.min.js"></script>
 </head>
 <body data-bs-theme="dark">
 
@@ -399,11 +400,11 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
 
     document.getElementById('exportButton').addEventListener('click', async function () {
         document.getElementById('exportModalBody').innerHTML = `
-            <div class="spinner-border" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-                <p>Daten werden ins Klassenbuch übertragen...</p>
-        `;
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p>Daten werden ins Klassenbuch übertragen...</p>
+    `;
 
         const attendanceTables = document.getElementById('attendanceTables');
         const classTables = attendanceTables.querySelectorAll('div[id^="class-"]');
@@ -458,20 +459,58 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
             if (!response.ok) throw new Error(result.error || 'Fehler beim Exportieren der Daten!');
 
             document.getElementById('exportModalBody').innerHTML = `
-        <div class="alert alert-success fade show" role="alert">
-            Daten erfolgreich exportiert!
-        </div>
-        <button type="button" class="btn btn-secondary mt-3" data-bs-dismiss="modal">Schließen</button>
-    `;
+            <div class="alert alert-success fade show" role="alert">
+                Daten erfolgreich exportiert!
+            </div>
+            <button type="button" class="btn btn-secondary mt-3" data-bs-dismiss="modal">Schließen</button>
+        `;
         } catch (error) {
+            let errorMessage = `Fehler beim Exportieren der Daten: ${error.message}`;
+            let loginButton = '';
+
+            if (error.message === 'Access token is invalid' || error.message === 'No access token found') {
+                errorMessage = 'Sie sind aktuell nicht mit Microsoft angemeldet!';
+                loginButton = `
+                <button type="button" class="btn btn-primary mt-1 me-2" onclick="loginWithMicrosoft()"><i class="bi bi-microsoft"></i> Mit Microsoft anmelden</button>
+            `;
+            }
+
             document.getElementById('exportModalBody').innerHTML = `
-        <div class="alert alert-danger fade show" role="alert">
-            Fehler beim Exportieren der Daten: ${error.message}
-        </div>
-        <button type="button" class="btn btn-secondary mt-3" data-bs-dismiss="modal">Schließen</button>
-    `;
+            <div class="alert alert-danger fade show" role="alert">
+                ${errorMessage}
+            </div>
+            ${loginButton}
+            <button type="button" class="btn btn-secondary mt-1" data-bs-dismiss="modal">Schließen</button>
+        `;
         }
     });
+
+    function loginWithMicrosoft() {
+        const msalConfig = {
+            auth: {
+                clientId: "e6549516-74f9-4887-95df-ef92d24547cd",
+                authority: "https://login.microsoftonline.com/d91e1d12-7b79-4ee7-ac76-168c1e1bd1c0",
+                redirectUri: "https://projekte.tgm.ac.at/3ahit/skarajeh/attendance/ms/auth/callback",
+            }
+        };
+
+        const msalInstance = new msal.PublicClientApplication(msalConfig);
+        const loginRequest = { scopes: ["Files.ReadWrite.All"] };
+
+        msalInstance.loginPopup(loginRequest)
+            .then(loginResponse => {
+                console.log("Angemeldet als:", loginResponse.account.username);
+                return msalInstance.acquireTokenSilent(loginRequest);
+            })
+            .then(tokenResponse => {
+                console.log("Token erhalten:", tokenResponse.accessToken);
+                // Store the token and refresh the page or perform the export again
+                window.location.reload();
+            })
+            .catch(error => {
+                console.error("Login-Fehler:", error);
+            });
+    }
 
     document.getElementById('classSelect').addEventListener('change', function () {
         var className = this.value;
