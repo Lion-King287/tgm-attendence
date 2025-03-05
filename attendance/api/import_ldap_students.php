@@ -1,4 +1,15 @@
 <?php
+session_start();
+
+// Überprüfen, ob der Benutzer eingeloggt ist
+if (!isset($_SESSION['username'])) {
+    header("Location: html/login.php");
+    exit();
+} elseif ($_SESSION['isAdmin'] !== 1) {
+    header("Location: ../index.php");
+    exit();
+}
+
 // LDAP connection settings
 $ldap_host = "ldap://dc-01.tgm.ac.at";
 $ldap_port = 389;

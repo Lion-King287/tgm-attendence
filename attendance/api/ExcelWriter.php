@@ -3,6 +3,15 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
+// Überprüfen, ob der Benutzer eingeloggt ist
+if (!isset($_SESSION['username'])) {
+    header("Location: html/login.php");
+    exit();
+} elseif ($_SESSION['isTeacher'] !== 1) {
+    header("Location: ../index.php");
+    exit();
+}
+
 require '../vendor/autoload.php';
 
 use GuzzleHttp\Client;

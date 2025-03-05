@@ -11,7 +11,7 @@ if (isset($_SESSION['username'])) {
 $ldap_server = "ldap://dc-01.tgm.ac.at";
 $ldap_port = 389;
 $ldap_user_domain = "tgm\\"; // Windows Domänen-Login-Präfix
-$ldap_base_dn = "ou=HIT,ou=Schueler,ou=People,ou=tgm,dc=tgm,dc=ac,dc=at";
+$ldap_base_dn = "ou=People,ou=tgm,dc=tgm,dc=ac,dc=at";
 
 // Formular-Verarbeitung
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -45,6 +45,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['cn'] = $cn;
             $_SESSION['employeeType'] = $employeeType;
             $_SESSION['department'] = $department;
+            $_SESSION['isTeacher'] = 1;
+            $_SESSION['isAdmin'] = 1;
+
+            /*
+            // Überprüfen, ob der Benutzer Mitglied der Gruppe "abt-adminhit" ist
+            $isAdmin = false;
+            if (isset($entries[0]["memberof"])) {
+                foreach ($entries[0]["memberof"] as $group) {
+                    if ($group === "CN=abt-adminhit,OU=Groups,OU=tgm,DC=tgm,DC=ac,DC=at") {
+                        $isAdmin = true;
+                        break;
+                    }
+                }
+            }
+            $_SESSION['isAdmin'] = $isAdmin ? 1 : 0;
+            */
 
             header("Location: ../index.php?login=success"); // Weiterleitung nach erfolgreichem Login
             exit();
@@ -102,7 +118,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <form class="card shadow p-4 needs-validation" method="post" novalidate
                       style="background-color: rgba(26,29,32,0.52)">
                     <img alt="tgm Logo" class="w-50 mx-auto mb-3" src="../img/tgm_logo_light.svg">
-                    <h1 class="h3 mb-3 fw-normal text-center">Benutzerportal Login</h1>
+                    <h1 class="h3 mb-3 fw-normal text-center">Anwesenheiten Login</h1>
 
                     <div id="loginErrorMessage">
                         <?php if (isset($loginError)) { ?>

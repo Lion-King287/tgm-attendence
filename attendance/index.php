@@ -160,7 +160,7 @@ $subjects = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="html/attendance.php" method="post">
+                <form id="createAttendance" action="html/attendance.php" method="post">
                     <div class="mb-3">
                         <i class="bi bi-door-closed"></i> <label for="roomSelect" class="form-label">Raum</label>
                         <select class="form-select" id="roomSelect" name="room" required>
@@ -280,7 +280,7 @@ $subjects = $stmt->fetchAll(PDO::FETCH_ASSOC);
         });
 
         // Form validation
-        document.querySelector('form').addEventListener('submit', function (event) {
+        document.getElementById('createAttendance').addEventListener('submit', function (event) {
             var unitsChecked = document.querySelectorAll('input[name="units[]"]:checked').length;
             if (unitsChecked === 0) {
                 event.preventDefault();

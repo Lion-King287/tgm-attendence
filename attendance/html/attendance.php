@@ -5,7 +5,11 @@ session_start();
 if (!isset($_SESSION['username'])) {
     header("Location: html/login.php");
     exit();
+} elseif ($_SESSION['isTeacher'] !== 1) {
+    header("Location: ../index.php");
+    exit();
 }
+
 
 // Datenbankverbindung
 $host = 'localhost';
@@ -120,7 +124,6 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
         </div>
     </nav>
 </header>
-
 <main>
     <div class="container-fluid">
         <div class="row justify-content-center m-1 mb-3 bg-body-tertiary rounded shadow">
@@ -178,18 +181,18 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
             </div>
             <div class="modal-body">
                 <div class="alert alert-warning" role="alert">
-                    Eine unbekannte Karte wurde gescannt, wollen Sie diese einem Schüler zuweisen?
+                    <i class="bi bi-person-vcard"></i> Eine unbekannte Karte wurde gescannt, wollen Sie diese einem Schüler zuweisen?
                 </div>
                 <form id="assignCardForm">
                     <div class="mb-3">
-                        <label for="classSelect" class="form-label">Klasse</label>
+                        <i class="bi bi-person-video3"></i> <label for="classSelect" class="form-label">Klasse</label>
                         <select class="form-select" id="classSelect" required>
                             <option value="" selected disabled>Wähle eine Klasse</option>
                             <!-- Options will be populated dynamically -->
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="studentSelect" class="form-label">Schüler</label>
+                        <i class="bi bi-person-plus"></i> <label for="studentSelect" class="form-label">Schüler</label>
                         <select class="form-select" id="studentSelect" required>
                             <option value="" selected disabled>Wähle einen Schüler</option>
                             <!-- Options will be populated dynamically -->
@@ -227,28 +230,35 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        var token = 'czEZ3TDDWLmk8lXgJKVtcmrs6SOE8PW7ehBlpTW6EVeYaLxD7RlqKT9vdhL91pZU';
         var socket = new WebSocket('ws://localhost:8080');
 
         socket.onopen = function () {
             console.log('WebSocket connection established');
+            socket.send(JSON.stringify({ action: 'authenticate', token: token }));
         };
 
         socket.onmessage = function (event) {
             var data = JSON.parse(event.data);
-            if (!data.room === '<?php echo $roomName; ?>') {
-                return;
-            }
-            console.log('New attendance:', data);
-
-            if (!data.firstname || !data.lastname || !data.class) {
-                // Show the modal to assign the card to a student
-                document.getElementById('cardIdInput').value = data.card_id;
-                fetchClasses();
-                var assignCardModal = new bootstrap.Modal(document.getElementById('assignCardModal'));
-                assignCardModal.show();
+            if (data.action === 'authenticated') {
+                console.log('WebSocket authenticated');
+            } else if (data.action === 'error') {
+                console.error('WebSocket error:', data.message);
+                socket.close();
             } else {
-                // Update the attendance page with the new data
-                updateAttendanceTable(data);
+                if (!data.room === '<?php echo $roomName; ?>') {
+                    return;
+                }
+                console.log('New attendance:', data);
+
+                if (!data.firstname || !data.lastname || !data.class) {
+                    document.getElementById('cardIdInput').value = data.card_id;
+                    fetchClasses();
+                    var assignCardModal = new bootstrap.Modal(document.getElementById('assignCardModal'));
+                    assignCardModal.show();
+                } else {
+                    updateAttendanceTable(data);
+                }
             }
         };
 

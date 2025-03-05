@@ -83,7 +83,9 @@ if (!$personData) {
 }
 
 try {
+    $token = 'czEZ3TDDWLmk8lXgJKVtcmrs6SOE8PW7ehBlpTW6EVeYaLxD7RlqKT9vdhL91pZU'; // Replace with actual token generation logic
     $client = new Client("ws://localhost:8080");
+    $client->send(json_encode(['action' => 'authenticate', 'token' => $token]));
     $client->send($wsData);
     $client->close();
 } catch (Exception $e) {

@@ -23,13 +23,31 @@ class Chat implements Ratchet\MessageComponentInterface
 
     public function onMessage(Ratchet\ConnectionInterface $from, $msg)
     {
-        echo "Nachricht erhalten: $msg\n";
+        $data = json_decode($msg, true);
 
-        foreach ($this->clients as $client) {
-            if ($client !== $from) {
-                $client->send($msg);
+        if ($data['action'] === 'authenticate') {
+            if ($this->isValidToken($data['token'])) {
+                $from->send(json_encode(['action' => 'authenticated']));
+            } else {
+                $from->send(json_encode(['action' => 'error', 'message' => 'Invalid token']));
+                $from->close();
+            }
+        } else {
+            echo "Nachricht erhalten: $msg\n";
+
+            foreach ($this->clients as $client) {
+                if ($client !== $from) {
+                    $client->send($msg);
+                }
             }
         }
+    }
+
+    private function isValidToken($token)
+    {
+        // Implement your token validation logic here
+        // For example, check if the token exists in the database or session
+        return $token === 'czEZ3TDDWLmk8lXgJKVtcmrs6SOE8PW7ehBlpTW6EVeYaLxD7RlqKT9vdhL91pZU'; // Replace with actual validation
     }
 
     public function onClose(Ratchet\ConnectionInterface $conn)
