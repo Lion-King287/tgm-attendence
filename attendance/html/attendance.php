@@ -3,7 +3,7 @@ session_start();
 
 // Überprüfen, ob der Benutzer eingeloggt ist
 if (!isset($_SESSION['username'])) {
-    header("Location: html/login.php");
+    header("Location: ../html/login.php");
     exit();
 } elseif ($_SESSION['isTeacher'] !== 1) {
     header("Location: ../index.php");
@@ -105,7 +105,7 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuButton">
                                     <li>
-                                        <form action="html/logout.php" method="post">
+                                        <form action="logout.php" method="post">
                                             <button class="dropdown-item text-danger" type="submit"><i
                                                         class="bi bi-door-closed"></i> Abmelden
                                             </button>
@@ -462,7 +462,7 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
             <div class="alert alert-success fade show" role="alert">
                 Daten erfolgreich exportiert!
             </div>
-            <button type="button" class="btn btn-secondary mt-3" data-bs-dismiss="modal">Schließen</button>
+            <button type="button" class="btn btn-secondary mt-1" data-bs-dismiss="modal">Schließen</button>
         `;
         } catch (error) {
             let errorMessage = `Fehler beim Exportieren der Daten: ${error.message}`;
@@ -471,7 +471,7 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
             if (error.message === 'Access token is invalid' || error.message === 'No access token found') {
                 errorMessage = 'Sie sind aktuell nicht mit Microsoft angemeldet!';
                 loginButton = `
-                <button type="button" class="btn btn-primary mt-1 me-2" onclick="loginWithMicrosoft()"><i class="bi bi-microsoft"></i> Mit Microsoft anmelden</button>
+                <button type="button" class="btn btn-primary mt-1 me-2" id="microsoftLoginButton" onclick="loginWithMicrosoft()"><i class="bi bi-microsoft"></i> Mit Microsoft anmelden</button>
             `;
             }
 
@@ -486,31 +486,58 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
     });
 
     function loginWithMicrosoft() {
-        const msalConfig = {
-            auth: {
-                clientId: "e6549516-74f9-4887-95df-ef92d24547cd",
-                authority: "https://login.microsoftonline.com/d91e1d12-7b79-4ee7-ac76-168c1e1bd1c0",
-                redirectUri: "https://projekte.tgm.ac.at/3ahit/skarajeh/attendance/ms/auth/callback",
-            }
-        };
+        let popup = window.open(
+            "https://login.microsoftonline.com/d91e1d12-7b79-4ee7-ac76-168c1e1bd1c0/oauth2/v2.0/authorize?client_id=e6549516-74f9-4887-95df-ef92d24547cd&response_type=token&redirect_uri=https://projekte.tgm.ac.at/3ahit/skarajeh/attendance/ms/auth/callback&scope=User.Read Files.ReadWrite.All Sites.ReadWrite.All",
+            "msLogin",
+            "width=600,height=600"
+        );
 
-        const msalInstance = new msal.PublicClientApplication(msalConfig);
-        const loginRequest = { scopes: ["Files.ReadWrite.All"] };
+        window.addEventListener("message", function(event) {
+            if (event.origin !== "https://projekte.tgm.ac.at") return; // Sicherheitsprüfung
 
-        msalInstance.loginPopup(loginRequest)
-            .then(loginResponse => {
-                console.log("Angemeldet als:", loginResponse.account.username);
-                return msalInstance.acquireTokenSilent(loginRequest);
+            let accessToken = event.data;
+
+            // Per POST an token_receiver.php senden
+            fetch("../api/token_receiver.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: "microsoft_token=" + encodeURIComponent(accessToken)
             })
-            .then(tokenResponse => {
-                console.log("Token erhalten:", tokenResponse.accessToken);
-                // Store the token and refresh the page or perform the export again
-                window.location.reload();
-            })
-            .catch(error => {
-                console.error("Login-Fehler:", error);
-            });
+                .then(response => response.text())
+                .then(data => {
+                    console.log("Server Response:", data);
+                    displayAlert("Login erfolgreich! Bitte starten Sie den Export erneut.", "success");
+                    document.getElementById('microsoftLoginButton').style.display = 'none';
+                })
+                .catch(error => {
+                    console.error("Fehler:", error);
+                    displayAlert("Login fehlgeschlagen: " + error.message, "danger");
+                });
+
+            const exportModal = new bootstrap.Modal(document.getElementById('exportModal'));
+            exportModal.hide();
+        }, false);
     }
+
+    function displayAlert(message, type) {
+        document.getElementById('exportModalBody').innerHTML = `
+        <div class="alert alert-${type} fade show" role="alert">
+            ${message}
+        </div>
+        <button type="button" class="btn btn-primary mt-1 me-2" id="microsoftLoginButton" onclick="loginWithMicrosoft()"><i class="bi bi-microsoft"></i> Mit Microsoft anmelden</button>
+        <button type="button" class="btn btn-secondary mt-1" onclick="closeExportModal()">Schließen</button>
+            `;
+    }
+
+    function closeExportModal() {
+        const exportModal = new bootstrap.Modal(document.getElementById('exportModal'));
+        exportModal.hide();
+    }
+
+
+
 
     document.getElementById('classSelect').addEventListener('change', function () {
         var className = this.value;

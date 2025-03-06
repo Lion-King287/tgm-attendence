@@ -3,7 +3,7 @@ session_start();
 
 // Überprüfen, ob der Benutzer eingeloggt ist
 if (!isset($_SESSION['username'])) {
-    header("Location: html/login.php");
+    header("Location: ../html/login.php");
     exit();
 } elseif ($_SESSION['isTeacher'] !== 1) {
     header("Location: ../index.php");
