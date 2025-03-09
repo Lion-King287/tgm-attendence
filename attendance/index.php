@@ -140,17 +140,113 @@ $subjects = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <main>
     <div class="container-fluid">
-        <div class="row justify-content-center m-1 mb-3 bg-body-tertiary rounded shadow">
+        <div class="row d-flex justify-content-center m-1 mb-3 bg-body-tertiary rounded shadow">
             <div class="col-12 text-center">
                 <h1 class="mt-3">Startseite</h1>
             </div>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#attendanceModal">
-                Neue Anwesenheitsprüfung starten
-            </button>
+            <div class="col-3 d-flex justify-content-center">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#attendanceModal">
+                    Neue Lernbüro-Anwesenheitsprüfung starten
+                </button>
+            </div>
+            <div class="col-3 d-flex justify-content-center">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#classAttendanceModal">
+                    Neue Klassen-Anwesenheitsprüfung starten
+                </button>
+            </div>
+
 
         </div>
     </div>
 </main>
+
+<div class="modal fade" id="classAttendanceModal" tabindex="-1" aria-labelledby="classAttendanceModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="classAttendanceModalLabel">Neue Klassen-Anwesenheitsprüfung</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="createClassAttendance" action="html/class_attendance.php" method="post">
+                    <div class="mb-3">
+                        <i class="bi bi-door-closed"></i> <label for="roomSelectClass" class="form-label">Raum</label>
+                        <select class="form-select" id="roomSelectClass" name="room" required>
+                            <option selected disabled value="">Wählen Sie einen Raum</option>
+                            <?php foreach ($rooms as $room): ?>
+                                <option value="<?php echo htmlspecialchars($room['room_name']); ?>">
+                                    <?php echo htmlspecialchars($room['room_name']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <i class="bi bi-journal-text"></i> <label for="subjectSelectClass" class="form-label">Fach</label>
+                        <select class="form-select" id="subjectSelectClass" name="subject" required>
+                            <option selected disabled value="">Wählen Sie ein Fach</option>
+                            <?php foreach ($subjects as $subject): ?>
+                                <option value="<?php echo htmlspecialchars($subject['short_name']); ?>">
+                                    <?php echo htmlspecialchars($subject['short_name']); ?>
+                                    (<?php echo htmlspecialchars($subject['long_name']); ?>)
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <i class="bi bi-people"></i> <label for="classSelect" class="form-label">Klasse</label>
+                        <select class="form-select" id="classSelect" name="class" required>
+                            <option selected disabled value="">Wählen Sie eine Klasse</option>
+                            <!-- Klassenoptionen werden hier dynamisch eingefügt -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <i class="bi bi-calendar-event"></i> <label for="datePickerClass" class="form-label">Datum</label>
+                        <input type="date" class="form-control" id="datePickerClass" name="date" required>
+                    </div>
+                    <div class="mb-3">
+                        <i class="bi bi-clock"></i> <label class="form-label">Unterrichtseinheiten</label>
+                        <div class="btn-group" role="group" aria-label="Unterrichtseinheiten">
+                            <input type="checkbox" class="btn-check" id="unit1Class" name="units[]" value="1" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="unit1Class">1</label>
+
+                            <input type="checkbox" class="btn-check" id="unit2Class" name="units[]" value="2" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="unit2Class">2</label>
+
+                            <input type="checkbox" class="btn-check" id="unit3Class" name="units[]" value="3" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="unit3Class">3</label>
+
+                            <input type="checkbox" class="btn-check" id="unit4Class" name="units[]" value="4" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="unit4Class">4</label>
+
+                            <input type="checkbox" class="btn-check" id="unit5Class" name="units[]" value="5" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="unit5Class">5</label>
+
+                            <input type="checkbox" class="btn-check" id="unit6Class" name="units[]" value="6" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="unit6Class">6</label>
+
+                            <input type="checkbox" class="btn-check" id="unit7Class" name="units[]" value="7" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="unit7Class">7</label>
+
+                            <input type="checkbox" class="btn-check" id="unit8Class" name="units[]" value="8" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="unit8Class">8</label>
+
+                            <input type="checkbox" class="btn-check" id="unit9Class" name="units[]" value="9" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="unit9Class">9</label>
+
+                            <input type="checkbox" class="btn-check" id="unit10Class" name="units[]" value="10" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="unit10Class">10</label>
+
+                            <input type="checkbox" class="btn-check" id="unit11Class" name="units[]" value="11" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="unit11Class">11</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Anwesenheitsprüfung starten</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="modal fade" id="attendanceModal" tabindex="-1" aria-labelledby="attendanceModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -288,6 +384,68 @@ $subjects = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         });
     });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Set the current date in the date picker
+        var today = new Date().toISOString().split('T')[0];
+        document.getElementById('datePickerClass').value = today;
+
+        // Fetch classes and populate the class select dropdown
+        fetchClasses();
+
+        // Preselect the current lesson unit
+        var lessonTimes = [
+            {start: '08:00', end: '08:50', unit: 'unit1Class'},
+            {start: '08:50', end: '09:40', unit: 'unit2Class'},
+            {start: '09:50', end: '10:40', unit: 'unit3Class'},
+            {start: '10:40', end: '11:30', unit: 'unit4Class'},
+            {start: '11:30', end: '12:20', unit: 'unit5Class'},
+            {start: '12:30', end: '13:20', unit: 'unit6Class'},
+            {start: '13:20', end: '14:10', unit: 'unit7Class'},
+            {start: '14:10', end: '15:00', unit: 'unit8Class'},
+            {start: '15:10', end: '16:00', unit: 'unit9Class'},
+            {start: '16:00', end: '16:50', unit: 'unit10Class'},
+            {start: '17:00', end: '17:45', unit: 'unit11Class'}
+        ];
+
+        var now = new Date();
+        var currentTime = ('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2);
+
+        lessonTimes.forEach(function (lesson) {
+            if (currentTime >= lesson.start && currentTime <= lesson.end) {
+                document.getElementById(lesson.unit).checked = true;
+            }
+        });
+
+        // Form validation
+        document.getElementById('createClassAttendance').addEventListener('submit', function (event) {
+            var unitsChecked = document.querySelectorAll('input[name="units[]"]:checked').length;
+            if (unitsChecked === 0) {
+                event.preventDefault();
+                alert('Bitte wählen Sie mindestens eine Unterrichtseinheit aus.');
+            }
+        });
+    });
+
+    function fetchClasses() {
+        // Fetch the list of classes from the server
+        fetch('api/get_classes.php')
+            .then(response => response.json())
+            .then(classes => {
+                // Sort classes alphabetically
+                classes.sort((a, b) => a.class.localeCompare(b.class));
+
+                var classSelect = document.getElementById('classSelect');
+                classSelect.innerHTML = '<option value="" selected disabled>Wähle eine Klasse</option>';
+                classes.forEach(cls => {
+                    var option = document.createElement('option');
+                    option.value = cls.class; // Ensure this matches the key in the returned JSON
+                    option.textContent = cls.class; // Ensure this matches the key in the returned JSON
+                    classSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching classes:', error));
+    }
 </script>
 
 <script crossorigin="anonymous"

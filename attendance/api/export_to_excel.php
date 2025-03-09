@@ -1,9 +1,6 @@
 <?php
 session_start();
 
-
-
-// Überprüfen, ob der Benutzer eingeloggt ist
 if (!isset($_SESSION['username'])) {
     header("Location: ../html/login.php");
     exit();
@@ -28,26 +25,21 @@ if (!ExcelWriter::isMicrosoftTokenValid($accessToken)) {
 }
 
 try {
-    // Empfange die JSON-Daten
     $data = file_get_contents('php://input');
-
-    // Dekodiere die JSON-Daten
     $decodedData = json_decode($data, true);
 
-    // Überprüfe, ob die Dekodierung erfolgreich war
     if ($decodedData === null) {
         throw new Exception('Invalid JSON data');
     }
 
-    // Speichere die Daten in Variablen
     $room = $decodedData['room'];
     $date = $decodedData['date'];
     $units = explode(', ', $decodedData['units']);
     $subject = $decodedData['subject'];
+    $cellSubject = $decodedData['cellSubject'];
     $teacherShortName = $decodedData['teacherShortName'];
     $students = $decodedData['students'];
 
-    // Wochentag und Spaltenzuordnung
     $dayOfWeek = date('N', strtotime($date));
     $unitColumns = [
         1 => ['F', 'R', 'AD', 'AP', 'BB'],
@@ -63,54 +55,66 @@ try {
         11 => ['P', 'AB', 'AN', 'AZ', 'BL']
     ];
 
-    // Unterrichtswoche (hardcoded)
     $sheetName = getTeachingWeek($date);
 
-    // Gruppiere Schüler nach Klassen
+    if ($sheetName === null) {
+        throw new Exception('Invalid sheet name');
+    }
+
     $classes = [];
     foreach ($students as $student) {
         $classes[$student['class']][] = $student;
     }
 
-    // Erstelle pro Klasse eine ExcelWriter-Instanz und schreibe die Daten
     foreach ($classes as $className => $classStudents) {
         $filePath = "{$className}.xlsm";
-
         $excelWriter = new ExcelWriter($accessToken, $filePath);
 
-        // Schreibe den Lehrerkürzel in die Zeile 7
         foreach ($units as $unit) {
             $column = $unitColumns[$unit][$dayOfWeek - 1];
             $teacherCell = "{$column}7";
+            $subjectCell = "{$column}4";
 
-            // Lese den aktuellen Wert der Zelle
             $currentValue = $excelWriter->readFromExcelCell($sheetName, $teacherCell);
             if (str_contains($currentValue, $teacherShortName)) {
                 continue;
             }
 
-            // Füge den neuen Lehrerkürzel hinzu
             if ($currentValue) {
                 $newValue = $currentValue . '/' . $teacherShortName;
             } else {
                 $newValue = $teacherShortName;
             }
 
-            $excelWriter->writeToExcelRangeWithGaps($sheetName, [$teacherCell => $newValue]);
+            $cells = [
+                $teacherCell => $newValue,
+                $subjectCell => $subject
+            ];
+
+            $excelWriter->writeToExcelRangeWithGaps($sheetName, $cells);
         }
 
-        // Schreibe die Schülerdaten
         $cells = [];
         foreach ($classStudents as $student) {
+            $remainingMinutes = !empty($student['late_minutes']) ? $student['late_minutes'] : 0;
+
             foreach ($units as $index => $unit) {
                 $column = $unitColumns[$unit][$dayOfWeek - 1];
                 $row = $student['catalog_number'] + 9;
                 $cell = "{$column}{$row}";
 
-                if ($index == 0 && !empty($student['late_minutes'])) {
-                    $cells[$cell] = 'Z' . $student['late_minutes'];
+                if (!empty($student['is_absent']) && $student['is_absent'] === 1) {
+                    $cells[$cell] = 'F';
+                } else if ($remainingMinutes > 0) {
+                    if ($remainingMinutes >= 50) {
+                        $cells[$cell] = 'F';
+                        $remainingMinutes -= 50;
+                    } else {
+                        $cells[$cell] = 'Z' . $remainingMinutes;
+                        $remainingMinutes = 0;
+                    }
                 } else {
-                    $cells[$cell] = $subject;
+                    $cells[$cell] = $cellSubject;
                 }
             }
         }
@@ -118,7 +122,6 @@ try {
         $excelWriter->writeToExcelRangeWithGaps($sheetName, $cells);
     }
 
-    // Bestätigungsnachricht zurückgeben
     echo json_encode(['success' => 'Data successfully exported to Excel']);
 } catch (Exception $e) {
     http_response_code(500);
@@ -172,6 +175,6 @@ function getTeachingWeek($datum) {
         }
     }
 
-    return null; // Falls das Datum in keiner UW liegt
+    return null;
 }
 ?>

@@ -31,7 +31,7 @@ if (!isset($_GET['class'])) {
 $class = $_GET['class'];
 
 try {
-    $stmt = $pdo->prepare('SELECT username, firstname, lastname FROM students WHERE class = ?');
+    $stmt = $pdo->prepare('SELECT username, firstname, lastname, catalog_number, class FROM students WHERE class = ?');
     $stmt->execute([$class]);
     $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
     echo json_encode($students);
