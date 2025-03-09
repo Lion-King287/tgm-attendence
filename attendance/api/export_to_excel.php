@@ -103,7 +103,7 @@ try {
                 $row = $student['catalog_number'] + 9;
                 $cell = "{$column}{$row}";
 
-                if (!empty($student['is_absent']) && $student['is_absent'] === 1) {
+                if (!empty($student['is_absent'])) {
                     $cells[$cell] = 'F';
                 } else if ($remainingMinutes > 0) {
                     if ($remainingMinutes >= 50) {

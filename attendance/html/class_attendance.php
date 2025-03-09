@@ -317,6 +317,7 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
             existingRow.cells[5].innerHTML = data.login_timestamp ? '<span class="badge bg-success">Anwesend</span>' : '<span class="badge bg-danger">Abwesend</span>';
             existingRow.querySelector('.late-checkbox').disabled = !data.login_timestamp;
             existingRow.querySelector('.btn i').className = data.login_timestamp ? 'bi bi-box-arrow-in-left' : 'bi bi-box-arrow-in-right';
+            updateAttendanceCount();
             return;
         }
 
@@ -336,6 +337,7 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
         <td><button class="btn btn-primary btn-sm" onclick="toggleAttendanceStatus(this)"><i class="${data.login_timestamp ? 'bi bi-box-arrow-in-left' : 'bi bi-box-arrow-in-right'}"></i></button></td>
     `;
         tableBody.appendChild(newRow);
+        updateAttendanceCount();
     }
 
     function toggleAttendanceStatus(button) {
@@ -354,6 +356,7 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
             lateCheckbox.disabled = false;
             icon.className = 'bi bi-box-arrow-in-left';
         }
+        updateAttendanceCount();
     }
 
     function fetchStudentsFirst(className) {
@@ -401,7 +404,16 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
     function updateAttendanceCount() {
         const attendanceTables = document.getElementById('attendanceTables');
         const rows = attendanceTables.querySelectorAll('tbody tr');
-        document.getElementById('attendanceCount').innerText = rows.length;
+        let count = 0;
+
+        rows.forEach(row => {
+            const statusCell = row.cells[5];
+            if (statusCell.innerHTML.includes('bg-success')) {
+                count++;
+            }
+        });
+
+        document.getElementById('attendanceCount').innerText = count;
     }
 
     document.addEventListener('DOMContentLoaded', function () {
