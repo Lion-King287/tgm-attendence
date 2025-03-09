@@ -19,7 +19,7 @@ class SharePointFileFetcher
         $this->siteId = $this->fetchSiteId();
     }
 
-    private function fetchSiteId(): string
+    public function fetchSiteId(): string
     {
         try {
             $client = $this->initializeHttpClient();
@@ -78,18 +78,77 @@ class SharePointFileFetcher
             return [];
         }
     }
+
+    public function getFileIdByPath(string $filePath): string
+    {
+        try {
+            $client = $this->initializeHttpClient();
+
+            $url = "https://graph.microsoft.com/v1.0/sites/" . $this->siteId . "/drive/root:/" . $filePath;
+
+            $headers = [
+                'Authorization' => 'Bearer ' . $this->accessToken,
+                'Content-Type' => 'application/json'
+            ];
+
+            $response = $client->request('GET', $url, [
+                'headers' => $headers
+            ]);
+
+            if ($response->getStatusCode() == 200) {
+                $data = json_decode($response->getBody(), true);
+                return $data['id'];
+            } else {
+                throw new Exception("Error fetching file ID: " . $response->getStatusCode());
+            }
+        } catch (Exception $e) {
+            echo 'Error: ' . $e->getMessage() . PHP_EOL;
+            return '';
+        }
+    }
+
+    public function getFileInfoById(string $fileId): array
+    {
+        try {
+            $client = $this->initializeHttpClient();
+
+            $url = "https://graph.microsoft.com/v1.0/sites/" . $this->siteId . "/drive/items/" . $fileId;
+
+            $headers = [
+                'Authorization' => 'Bearer ' . $this->accessToken,
+                'Content-Type' => 'application/json'
+            ];
+
+            $response = $client->request('GET', $url, [
+                'headers' => $headers
+            ]);
+
+            if ($response->getStatusCode() == 200) {
+                return json_decode($response->getBody(), true);
+            } else {
+                throw new Exception("Error fetching file info: " . $response->getStatusCode());
+            }
+        } catch (Exception $e) {
+            echo 'Error: ' . $e->getMessage() . PHP_EOL;
+            return [];
+        }
+    }
 }
 
-/*
+
 $accessToken = $_SESSION['microsoft_token'];
+// tgmwien.sharepoint.com,bde961ef-ac5b-470c-82e7-b3e5571262d9,7e44ac09-bc23-4ad2-b3b1-525f194f6163
 $siteName = 'tgmwien.sharepoint.com:/teams/HIT';
 $filePath = 'Klassenbücher/SchülerIn/3AHIT/Karajeh Sharif.xlsx';
 
 $fileFetcher = new SharePointFileFetcher($accessToken, $siteName);
-$fileInfo = $fileFetcher->fetchFileInfo($filePath);
-
+//$fileInfo = $fileFetcher->fetchFileInfo($filePath);
+//echo $fileFetcher->fetchSiteId() . '<br>';
+//echo json_encode($fileInfo, JSON_PRETTY_PRINT);
+$fileId = $fileFetcher->getFileIdByPath($filePath);
+$fileInfo = $fileFetcher->getFileInfoById($fileId);
+echo $fileId . '<br>';
 echo json_encode($fileInfo, JSON_PRETTY_PRINT);
-*/
 
 function getTeachingWeek($datum) {
     $unterrichtswochen = [
@@ -141,4 +200,4 @@ function getTeachingWeek($datum) {
     return null; // Falls das Datum in keiner UW liegt
 }
 
-echo getTeachingWeek('2025-03-10') . PHP_EOL;
+//echo getTeachingWeek('2025-03-10') . PHP_EOL;

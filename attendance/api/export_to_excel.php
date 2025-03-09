@@ -18,7 +18,7 @@ if (!isset($_SESSION['microsoft_token'])) {
 $accessToken = $_SESSION['microsoft_token'];
 require 'ExcelWriter.php';
 
-if (!ExcelWriter::isMicrosoftTokenValid($accessToken)) {
+if (!ExcelClassbookHelper::isMicrosoftTokenValid($accessToken)) {
     http_response_code(500);
     echo json_encode(['error' => 'Access token is invalid']);
     exit;
@@ -67,8 +67,8 @@ try {
     }
 
     foreach ($classes as $className => $classStudents) {
-        $filePath = "{$className}.xlsm";
-        $excelWriter = new ExcelWriter($accessToken, $filePath);
+        $filePath = $className;
+        $excelWriter = new ExcelClassbookHelper($accessToken, $filePath, isset($_SESSION['useRealClassbook']) && $_SESSION['useRealClassbook'] === true);
 
         foreach ($units as $unit) {
             $column = $unitColumns[$unit][$dayOfWeek - 1];

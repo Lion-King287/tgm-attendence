@@ -16,18 +16,24 @@ require '../vendor/autoload.php';
 
 use GuzzleHttp\Client;
 
-class ExcelWriter
+class ExcelClassbookHelper
 {
 
     private string $accessToken;
-    private string $filePath;
+    private string $fileName;
     private string $fileId;
+    private string $siteId = 'tgmwien.sharepoint.com,bde961ef-ac5b-470c-82e7-b3e5571262d9,7e44ac09-bc23-4ad2-b3b1-525f194f6163';
+    private bool $useRealClassbook;
 
-    public function __construct(string $accessToken, string $filePath)
+    public function __construct(string $accessToken, string $class, bool $useRealClassbook)
     {
         $this->accessToken = $accessToken;
-        $this->filePath = $filePath;
+        $this->fileName = $class . ".xlsm";
+        $this->useRealClassbook = $useRealClassbook;
         $this->fileId = $this->getFileId();
+        if (empty($this->fileId)) {
+            throw new Exception("File ID could not be retrieved.");
+        }
     }
 
     public static function isMicrosoftTokenValid(string $accessToken): bool
@@ -61,8 +67,12 @@ class ExcelWriter
         try {
             $client = new Client();
 
-            // API URL für die Suche nach der Datei
-            $url = "https://graph.microsoft.com/v1.0/me/drive/root:/Desktop/Schule/Klassenbücher/Tests:/search(q='" . basename($this->filePath) . "')";
+            if ($this->useRealClassbook) {
+                $url = "https://graph.microsoft.com/v1.0/sites/" . $this->siteId . "/drive/root:/Klassenbücher/" . $this->fileName;
+            } else {
+                // API URL für die Suche nach der Datei
+                $url = "https://graph.microsoft.com/v1.0/me/drive/root:/Desktop/Schule/Klassenbücher/Tests:/search(q='" . basename($this->fileName) . "')";
+            }
 
             // Header für den Request (Authorization)
             $headers = [
@@ -79,7 +89,7 @@ class ExcelWriter
             if ($response->getStatusCode() == 200) {
                 $data = json_decode($response->getBody(), true);
                 foreach ($data['value'] as $item) {
-                    if ($item['name'] === basename($this->filePath)) {
+                    if ($item['name'] === basename($this->fileName)) {
                         return $item['id'];
                     }
                 }
@@ -130,8 +140,12 @@ class ExcelWriter
         try {
             $client = new Client();
 
-            // API URL für den PATCH-Request
-            $url = "https://graph.microsoft.com/v1.0/me/drive/items/" . $this->fileId . "/workbook/worksheets/" . $sheetName . "/range(address='" . $startCell . ":" . $endCell . "')";
+            if ($this->useRealClassbook) {
+                $url = "https://graph.microsoft.com/v1.0/sites/" . $this->siteId . "/drive/items/" . $this->fileId . "/workbook/worksheets/" . $sheetName . "/range(address='" . $startCell . ":" . $endCell . "')";
+            } else {
+                // API URL für den PATCH-Request
+                $url = "https://graph.microsoft.com/v1.0/me/drive/items/" . $this->fileId . "/workbook/worksheets/" . $sheetName . "/range(address='" . $startCell . ":" . $endCell . "')";
+            }
 
             // Daten, die in den Bereich geschrieben werden
             $data = [
@@ -166,8 +180,12 @@ class ExcelWriter
         try {
             $client = new Client();
 
-            // API URL für den GET-Request
-            $url = "https://graph.microsoft.com/v1.0/me/drive/items/" . $this->fileId . "/workbook/worksheets/" . $sheetName . "/range(address='" . $startCell . ":" . $endCell . "')";
+            if ($this->useRealClassbook) {
+                $url = "https://graph.microsoft.com/v1.0/sites/" . $this->siteId . "/drive/items/" . $this->fileId . "/workbook/worksheets/" . $sheetName . "/range(address='" . $startCell . ":" . $endCell . "')";
+            } else {
+                // API URL für den GET-Request
+                $url = "https://graph.microsoft.com/v1.0/me/drive/items/" . $this->fileId . "/workbook/worksheets/" . $sheetName . "/range(address='" . $startCell . ":" . $endCell . "')";
+            }
 
             // Header für den Request (Authorization)
             $headers = [
@@ -198,8 +216,12 @@ class ExcelWriter
         try {
             $client = new Client();
 
-            // API URL für den GET-Request
-            $url = "https://graph.microsoft.com/v1.0/me/drive/items/" . $this->fileId . "/workbook/worksheets/" . $sheetName . "/range(address='" . $cell . "')";
+            if ($this->useRealClassbook) {
+                $url = "https://graph.microsoft.com/v1.0/sites/" . $this->siteId . "/drive/items/" . $this->fileId . "/workbook/worksheets/" . $sheetName . "/range(address='" . $cell . "')";
+            } else {
+                // API URL für den GET-Request
+                $url = "https://graph.microsoft.com/v1.0/me/drive/items/" . $this->fileId . "/workbook/worksheets/" . $sheetName . "/range(address='" . $cell . "')";
+            }
 
             // Header für den Request (Authorization)
             $headers = [
