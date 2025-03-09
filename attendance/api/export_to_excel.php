@@ -16,7 +16,7 @@ if (!isset($_SESSION['microsoft_token'])) {
 }
 
 $accessToken = $_SESSION['microsoft_token'];
-require 'ExcelWriter.php';
+require 'ExcelClassbookHelper.php';
 
 if (!ExcelClassbookHelper::isMicrosoftTokenValid($accessToken)) {
     http_response_code(500);
