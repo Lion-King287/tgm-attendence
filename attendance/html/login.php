@@ -47,6 +47,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['department'] = $department;
             $_SESSION['isTeacher'] = 1;
             $_SESSION['isAdmin'] = 1;
+            if ($employeeType === "Lehrer") {
+                $_SESSION['useRealClassbook'] = true;
+            }
 
             /*
             // Überprüfen, ob der Benutzer Mitglied der Gruppe "abt-adminhit" ist
