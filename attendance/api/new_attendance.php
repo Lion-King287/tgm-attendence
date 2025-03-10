@@ -49,17 +49,44 @@ $personData = $stmt->fetch();
 $wsData = '';
 
 if (!$personData) {
-    header('HTTP/1.1 404 Not Found');
-    echo json_encode(['error' => 'No person found with the given card ID']);
+    // Überprüfen, ob die card_id einem Lehrer gehört
+    $stmt = $pdo->prepare('SELECT * FROM teachers t JOIN teacher_cards tc ON t.username = tc.teacher_username WHERE tc.card_id = ?');
+    $stmt->execute([$cardId]);
+    $teacherData = $stmt->fetch();
 
-    $wsData = json_encode([
-        'card_id' => $cardId,
-        'firstname' => null,
-        'lastname' => null,
-        'class' => null,
-        'catalog_number' => null,
-        'login_timestamp' => null
-    ]);
+    if (!$teacherData) {
+        header('HTTP/1.1 404 Not Found');
+        echo json_encode(['error' => 'No person found with the given card ID']);
+
+        $wsData = json_encode([
+            'card_id' => $cardId,
+            'firstname' => null,
+            'lastname' => null,
+            'class' => null,
+            'catalog_number' => null,
+            'login_timestamp' => null
+        ]);
+    } else {
+        // Antwort zurückgeben
+        $response = [
+            'first_name' => $teacherData['firstname'],
+            'last_name' => $teacherData['lastname'],
+            'username' => $teacherData['username'],
+            'class' => 'Lehrkraft'
+        ];
+
+        header('Content-Type: application/json');
+        echo json_encode($response);
+
+        $wsData = json_encode([
+            'card_id' => $cardId,
+            'firstname' => $teacherData['firstname'],
+            'lastname' => $teacherData['lastname'],
+            'class' => 'Lehrkraft',
+            'catalog_number' => $teacherData['shortName'],
+            'login_timestamp' => round(microtime(true) * 1000)
+        ]);
+    }
 } else {
     // Antwort zurückgeben
     $response = [

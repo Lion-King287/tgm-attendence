@@ -144,14 +144,14 @@ $subjects = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="col-12 text-center">
                 <h1 class="mt-3">Startseite</h1>
             </div>
-            <div class="col-3 d-flex justify-content-center">
+            <div class="col-3 d-flex justify-content-center mt-2 mb-5">
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#attendanceModal">
-                    Neue Lernbüro-Anwesenheitsprüfung starten
+                    <i class="bi bi-building"></i> Neue Lernbüro-Anwesenheitsprüfung starten
                 </button>
             </div>
-            <div class="col-3 d-flex justify-content-center">
+            <div class="col-3 d-flex justify-content-center mt-2 mb-5">
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#classAttendanceModal">
-                    Neue Klassen-Anwesenheitsprüfung starten
+                    <i class="bi bi-people"></i> Neue Klassen-Anwesenheitsprüfung starten
                 </button>
             </div>
 

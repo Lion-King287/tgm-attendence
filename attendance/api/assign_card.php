@@ -26,26 +26,36 @@ try {
 // Eingabedaten aus der Anfrage lesen
 $data = json_decode(file_get_contents('php://input'), true);
 
-if (!isset($data['card_id']) || !isset($data['student_username'])) {
-    echo json_encode(['success' => false, 'error' => 'Missing card_id or student_username']);
+if (!isset($data['card_id']) || (!isset($data['student_username']) && !isset($data['teacher_username']))) {
+    echo json_encode(['success' => false, 'error' => 'Missing card_id, student_username or teacher_username']);
     exit;
 }
 
 $card_id = $data['card_id'];
-$student_username = $data['student_username'];
+$student_username = $data['student_username'] ?? null;
+$teacher_username = $data['teacher_username'] ?? null;
 
 try {
-    // Überprüfen, ob die Karte bereits einem anderen Schüler zugewiesen ist
-    $stmt = $pdo->prepare('SELECT * FROM student_cards WHERE card_id = ?');
+    // Überprüfen, ob die Karte bereits einem anderen Benutzer zugewiesen ist
+    if ($student_username) {
+        $stmt = $pdo->prepare('SELECT * FROM student_cards WHERE card_id = ?');
+    } elseif ($teacher_username) {
+        $stmt = $pdo->prepare('SELECT * FROM teacher_cards WHERE card_id = ?');
+    }
     $stmt->execute([$card_id]);
     if ($stmt->fetch()) {
-        echo json_encode(['success' => false, 'error' => 'Card already assigned to another student']);
+        echo json_encode(['success' => false, 'error' => 'Card already assigned to another user']);
         exit;
     }
 
-    // Karte dem Schüler zuweisen
-    $stmt = $pdo->prepare('INSERT INTO student_cards (card_id, student_username) VALUES (?, ?)');
-    $stmt->execute([$card_id, $student_username]);
+    // Karte dem Benutzer zuweisen
+    if ($student_username) {
+        $stmt = $pdo->prepare('INSERT INTO student_cards (card_id, student_username) VALUES (?, ?)');
+        $stmt->execute([$card_id, $student_username]);
+    } elseif ($teacher_username) {
+        $stmt = $pdo->prepare('INSERT INTO teacher_cards (card_id, teacher_username) VALUES (?, ?)');
+        $stmt->execute([$card_id, $teacher_username]);
+    }
 
     echo json_encode(['success' => true]);
 } catch (PDOException $e) {

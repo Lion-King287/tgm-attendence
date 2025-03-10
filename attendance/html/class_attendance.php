@@ -149,8 +149,7 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
                             echo htmlspecialchars($dateObj->format('d.m.Y')); ?></span>
                         <span class="badge bg-secondary me-2"><i
                                 class="bi bi-clock"></i> <?php echo htmlspecialchars(implode(', ', $units)); ?></span>
-                        <span class="badge bg-secondary me-2"><i
-                                class="bi bi-person"></i> <?php echo htmlspecialchars($teacherShortName); ?></span>
+                        <span class="badge bg-secondary me-2"><i class="bi bi-person"></i> <span id="teacherShortNameLabel"><?php echo htmlspecialchars($teacherShortName); ?></span></span>
                     </h4>
                 </div>
                 <div class="text-center mt-1">
@@ -254,13 +253,17 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
                 console.error('WebSocket error:', data.message);
                 socket.close();
             } else {
-
                 if (!data.firstname || !data.lastname || !data.class) {
                     document.getElementById('cardIdInput').value = data.card_id;
                     fetchClasses();
                     var assignCardModal = new bootstrap.Modal(document.getElementById('assignCardModal'));
                     assignCardModal.show();
                 } else {
+                    if (data.class === 'Lehrkraft') {
+                        var teacherShortName = '<?php echo $teacherShortName; ?>';
+                        teacherShortName += '/' + data.catalog_number;
+                        document.getElementById('teacherShortNameLabel').innerText = teacherShortName;
+                    }
                     if (data.class !== document.getElementById('classInput').value) {
                         return;
                     }
@@ -566,47 +569,53 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
 
     document.getElementById('classSelect').addEventListener('change', function () {
         var className = this.value;
-        fetchStudents(className);
+        if (className === 'Lehrkraft') {
+            fetchTeachers();
+        } else {
+            fetchStudents(className);
+        }
     });
 
     document.getElementById('assignCardButton').addEventListener('click', function () {
         var cardId = document.getElementById('cardIdInput').value;
-        var studentUsername = document.getElementById('studentSelect').value;
+        var selectedUser = document.getElementById('studentSelect').value;
+        var className = document.getElementById('classSelect').value;
 
-        if (studentUsername) {
-            assignCardToStudent(cardId, studentUsername);
+        if (className === 'Lehrkraft') {
+            assignCardToTeacher(cardId, selectedUser);
+        } else {
+            assignCardToStudent(cardId, selectedUser);
         }
     });
 
     function fetchClasses() {
-        // Fetch the list of classes from the server
         fetch('../api/get_classes.php')
             .then(response => response.json())
             .then(classes => {
-                // Sort classes alphabetically
                 classes.sort((a, b) => a.class.localeCompare(b.class));
-
-                var studentSelect = document.getElementById('studentSelect');
-                studentSelect.innerHTML = '<option value="" selected disabled>Wähle einen Schüler</option>';
 
                 var classSelect = document.getElementById('classSelect');
                 classSelect.innerHTML = '<option value="" selected disabled>Wähle eine Klasse</option>';
                 classes.forEach(cls => {
                     var option = document.createElement('option');
-                    option.value = cls.class; // Ensure this matches the key in the returned JSON
-                    option.textContent = cls.class; // Ensure this matches the key in the returned JSON
+                    option.value = cls.class;
+                    option.textContent = cls.class;
                     classSelect.appendChild(option);
                 });
+
+                // Add "Lehrkraft" option
+                var teacherOption = document.createElement('option');
+                teacherOption.value = 'Lehrkraft';
+                teacherOption.textContent = 'Lehrkraft';
+                classSelect.appendChild(teacherOption);
             })
             .catch(error => console.error('Error fetching classes:', error));
     }
 
     function fetchStudents(className) {
-        // Fetch the list of students for the selected class from the server
         fetch(`../api/get_students.php?class=${className}`)
             .then(response => response.json())
             .then(students => {
-                // Sort students by last name, then by first name
                 students.sort((a, b) => {
                     if (a.lastname === b.lastname) {
                         return a.firstname.localeCompare(b.firstname);
@@ -626,14 +635,56 @@ $initials = strtoupper(substr($fullName, 0, 1)) . strtoupper(substr(isset(explod
             .catch(error => console.error('Error fetching students:', error));
     }
 
+    function fetchTeachers() {
+        fetch('../api/get_teachers.php')
+            .then(response => response.json())
+            .then(teachers => {
+                teachers.sort((a, b) => {
+                    if (a.lastname === b.lastname) {
+                        return a.firstname.localeCompare(b.firstname);
+                    }
+                    return a.lastname.localeCompare(b.lastname);
+                });
+
+                var studentSelect = document.getElementById('studentSelect');
+                studentSelect.innerHTML = '<option value="" selected disabled>Wähle einen Lehrer</option>';
+                teachers.forEach(teacher => {
+                    var option = document.createElement('option');
+                    option.value = teacher.username;
+                    option.textContent = `${teacher.lastname} ${teacher.firstname}`;
+                    studentSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching teachers:', error));
+    }
+
     function assignCardToStudent(cardId, studentUsername) {
-        // Send the card assignment to the server
         fetch('../api/assign_card.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({card_id: cardId, student_username: studentUsername})
+            body: JSON.stringify({ card_id: cardId, student_username: studentUsername })
+        })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    var assignCardModal = bootstrap.Modal.getInstance(document.getElementById('assignCardModal'));
+                    assignCardModal.hide();
+                } else {
+                    alert('Error assigning card: ' + result.error);
+                }
+            })
+            .catch(error => console.error('Error assigning card:', error));
+    }
+
+    function assignCardToTeacher(cardId, teacherUsername) {
+        fetch('../api/assign_card.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ card_id: cardId, teacher_username: teacherUsername })
         })
             .then(response => response.json())
             .then(result => {
